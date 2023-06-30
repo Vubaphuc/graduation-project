@@ -1,0 +1,438 @@
+.tk {
+    height: 150px;
+    margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-bottom: 30px;
+}
+
+.tk .tk-ct {
+    background-color: #191C24;
+    flex: 0 0 auto;
+    width: 23%;
+    border-radius: 10px;
+
+}
+
+.tk-ct-text p {
+    font-size: 20px;
+    color: #6C7293;
+}
+
+.tk-ct-text h6 {
+    font-size: 20px;
+    color: white;
+}
+
+.tk-ct-icon {
+    color: #EB1616;
+}
+
+.dt {
+    height: 300px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-left: 30px;
+    margin-right: 30px;
+    height: auto;
+}
+
+.dt .dt-tp {
+    width: 49%;
+    background-color: #191C24;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.dt .dt-tp div div h6 {
+    font-size: 20px;
+    color: white;
+    font-weight: 700;
+}
+
+.dt .dt-tp div div a {
+    font-size: 20px;
+    font-weight: 700;
+    text-decoration: none;
+    color: #EB1616 !important;
+}
+
+.table-product {
+    margin-top: 220px;
+}
+
+.table-table {
+    background-color: #191C24;
+}
+
+.table-table div h6 {
+    color: white;
+    font-size: 18px;
+}
+
+.table-table div a {
+    color: #EB1616;
+    font-size: 18px;
+    text-decoration: none;
+}
+
+.table-responsive table tbody tr td {
+    color: #999;
+}
+
+.footer {
+    height: 40px;
+}
+
+.secondary {
+    background-color: #191C24;
+}
+
+.secondary h6 {
+    color: white;
+}
+
+.av-auth {
+    width: 40px;
+    height: 40px;
+}
+
+.dropdown-item {
+    height: 100%;
+}
+
+
+.navbar .navbar-nav .nav-link:hover,
+.navbar .navbar-nav .nav-link.active {
+    color: #EB1616;
+}
+
+
+
+
+.navbar .dropdown-item:hover,
+.navbar .dropdown-item.active {
+    background: #042a40;
+    color: #fff;
+}
+
+.navbar .dropdown-toggle::after {
+    margin-left: 6px;
+    vertical-align: middle;
+    border: none;
+    content: "\f107";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    transition: .5s;
+}
+
+.navbar .dropdown-toggle[aria-expanded=true]::after {
+    transform: rotate(-180deg);
+}
+
+
+.wrapper-container .navbar .navbar-nav .nav-item .hd-auth {
+    margin: 0;
+    padding: 0;
+    background-color: rgb(39, 50, 56);
+    top: 57px;
+    border-radius: 20px;
+}
+
+.wrapper-container .navbar .navbar-nav .nav-item .hd-auth .dropdown-item {
+    color: #777;
+    text-align: left;
+    line-height: 30px;
+    height: 40px;
+}
+
+.wrapper-container .navbar .navbar-nav .nav-item .hd-auth .dropdown-item:hover {
+    color: #EB1616;
+}
+
+.sidebar .navbar-nav .nav-item .nav-link {
+    color: #fff;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+.sidebar .navbar-nav .nav-item .dropdown-menu {
+    background-color: rgb(34, 45, 50);
+}
+
+.sidebar .navbar-nav .nav-item .dropdown-menu .dropdown-item {
+    color: #fff;
+    margin-top: 8px;
+}
+
+.sidebar .navbar-nav .nav-item .nav-link:hover,
+.sidebar .navbar-nav .nav-item .nav-link.active {
+    color: #f73f3f;
+}
+
+span {
+    cursor: pointer;
+}
+
+
+.navbar-nav .nav-item .dropdown-menu .dropdown-item:hover {
+    cursor: pointer;
+    border-radius: 15px;
+    background-color: rgb(10, 14, 15);
+    color: #f73f3f;
+}
+
+
+.sidebar .navbar-nav .nav-item .dropdown-toggle::after {
+    margin-left: 6px;
+    vertical-align: middle;
+    border: none;
+    content: "\f107";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    transition: .5s;
+}
+
+.sidebar .navbar-nav .nav-item .dropdown-toggle[aria-expanded=true]::after {
+    transform: rotate(-180deg);
+}
+
+.sidebar .navbar-nav .nav-link {
+    margin-left: 10px;
+}
+
+.sidebar .navbar-nav .chart {
+    margin-left: 20px;
+    color: #c71178;
+}
+
+.sidebar .navbar-nav .material {
+    margin-left: 17px;
+    color: #f757b1;
+}
+
+p {
+    color: #33d0c6;
+    padding-top: 10px;
+}
+
+.sidebar .navbar-nav .product {
+    margin-left: 17px;
+    color: #352eb7;
+}
+
+.product-dt {
+    margin-top: 80px;
+}
+
+.material-tk {
+    margin-bottom: 100px;
+}
+
+.logo-tra-cuu-bh img {
+    margin-left: 500px;
+}
+
+
+.completed {
+    color: rgb(18, 29, 222);
+}
+
+.not-completed {
+    color: red;
+}
+
+.tra-cuu {
+    width: 200px;
+    color: #5208d2;
+}
+
+.hd-login {
+    margin-right: 30px;
+    color: #fff;
+}
+
+.sidebar .navbar .navbar-nav .nav-item .search {
+    width: 230px;
+    padding: 5px;
+    color: #fff;
+    margin-left: 15px;
+    margin-top: 10px;
+}
+
+.sidebar .navbar .navbar-nav .nav-item .search:hover {
+    color: #f73f3f;
+    background-color: #222D32;
+}
+
+
+
+
+
+.invoice-card {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    padding: 10px 2em;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-height: 25em;
+    width: 30em;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 10px 30px 5px rgba(0, 0, 0, 0.15);
+}
+
+.invoice-card>div {
+    margin: 5px 0;
+}
+
+.invoice-title {
+    flex: 3;
+}
+
+.invoice-title #date {
+    display: block;
+    margin: 8px 0;
+    font-size: 12px;
+}
+
+.invoice-title #main-title {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2em;
+}
+
+.invoice-title #main-title h4 {
+    letter-spacing: 2.5px;
+}
+
+.invoice-title span {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.invoice-details {
+    flex: 1;
+    border-bottom: 0.5px dashed grey;
+    display: flex;
+    align-items: center;
+}
+
+.invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.invoice-table thead tr td {
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: grey;
+    padding: 8px 0;
+}
+
+.invoice-table thead tr td:nth-last-child(1),
+.row-data td:nth-last-child(1),
+.calc-row td:nth-last-child(1) {
+    text-align: right;
+}
+
+.invoice-table tbody tr td {
+    padding: 8px 0;
+    letter-spacing: 0;
+}
+
+.invoice-table .row-data #unit {
+    text-align: center;
+  
+}
+
+.invoice-table .row-data span {
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.invoice-footer {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.invoice-footer #later {
+    margin-right: 5px;
+}
+
+.btn {
+    border: none;
+    padding: 5px 0px;
+    background: none;
+    cursor: pointer;
+    letter-spacing: 1px;
+    outline: none;
+}
+
+.btn.btn-secondary {
+    color: rgba(0, 0, 0, 0.3);
+}
+
+.btn.btn-primary {
+    color: var(--primary-color);
+}
+
+.btn#later {
+    margin-right: 2em;
+}
+
+.admin {
+    background-color: #000;
+    height: auto;
+}
+
+
+.wrapper-container .container-fluid .bg-secondary .row .col-12 a {
+    color: #1619ea;
+}
+
+.row-boder {
+    border-top: 0.5px solid #666;
+}
+
+.row-top-boder {
+    border-top: 0.5px dashed grey;
+}
+
+.row-botton-boder {
+    border-bottom: 0.5px dashed grey;
+}
+
+.export-pdf {
+    width: 100%;
+    height: 100vh;
+    background-color: #9999;
+}
+
+.export-pdf .btn-export-dpf {
+    background-color: #0b9ab7;
+    display: inline-block;
+    cursor: pointer;
+    font-weight: 400;
+    white-space: nowrap;
+    text-align: center;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    padding: 8px 100px;
+    transition: all .5s;
+    margin-left: 32vw;
+    margin-top: 15vh;
+}
+
+.export-pdf .btn-export-dpf:hover {
+    background-color: #26d0f2;
+}
+
