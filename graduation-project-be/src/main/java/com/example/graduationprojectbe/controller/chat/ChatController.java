@@ -1,13 +1,11 @@
 package com.example.graduationprojectbe.controller.chat;
 
-import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
-import com.example.graduationprojectbe.entity.Room;
 import com.example.graduationprojectbe.repository.MessageRepository;
 import com.example.graduationprojectbe.repository.RoomRepository;
 import com.example.graduationprojectbe.repository.UserRepository;
-import com.example.graduationprojectbe.request.AddMemberRequest;
-import com.example.graduationprojectbe.request.CreateRoomRequest;
+import com.example.graduationprojectbe.request.other.AddMemberRequest;
+import com.example.graduationprojectbe.request.create.CreateRoomRequest;
 import com.example.graduationprojectbe.sercurity.ICurrentUserLmpl;
 import com.example.graduationprojectbe.service.chat.ChatService;
 import jakarta.validation.Valid;

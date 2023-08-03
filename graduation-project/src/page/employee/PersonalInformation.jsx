@@ -6,7 +6,6 @@ import addressQuery from "../formHTML/address";
 import hookPersonalInformation from "../hookForm/hook/hookAccount/hookPersonalInformation";
 import hookUpdateAvatar from "../hookForm/hook/hookAccount/hookUpdateAvatar";
 import { useFindEmployeeByIdQuery } from "../../app/apis/employee/employeeApi";
-import { useSelector } from "react-redux";
 import hookFetchQuery from "../hookForm/hook/hookAccount/hookFetchQuery";
 
 function PersonalInformation() {

@@ -1,7 +1,7 @@
 package com.example.graduationprojectbe.controller.engineer;
 
-import com.example.graduationprojectbe.request.CreateOrderMaterialRequest;
-import com.example.graduationprojectbe.request.UpdateOrderMaterialRequest;
+import com.example.graduationprojectbe.request.create.CreateOrderMaterialRequest;
+import com.example.graduationprojectbe.request.update.UpdateOrderMaterialRequest;
 import com.example.graduationprojectbe.service.engineer.EngineerOrderMaterialService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

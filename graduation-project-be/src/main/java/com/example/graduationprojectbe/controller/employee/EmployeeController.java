@@ -1,17 +1,13 @@
 package com.example.graduationprojectbe.controller.employee;
 
 import com.example.graduationprojectbe.entity.Image;
-import com.example.graduationprojectbe.request.ChangePasswordRequest;
-import com.example.graduationprojectbe.request.ForgotPasswordRequest;
-import com.example.graduationprojectbe.request.UpdatePersonalInformationRequest;
-import com.example.graduationprojectbe.service.auth.EmailService;
+import com.example.graduationprojectbe.request.other.ChangePasswordRequest;
+import com.example.graduationprojectbe.request.other.ForgotPasswordRequest;
+import com.example.graduationprojectbe.request.update.UpdatePersonalInformationRequest;
 import com.example.graduationprojectbe.service.employee.EmployeeService;
 import com.itextpdf.text.DocumentException;
-import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,10 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @RestController
 @RequestMapping("employee/api/v1")

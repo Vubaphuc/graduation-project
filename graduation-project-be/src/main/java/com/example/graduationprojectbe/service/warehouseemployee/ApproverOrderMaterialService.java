@@ -9,7 +9,7 @@ import com.example.graduationprojectbe.exception.NotFoundException;
 import com.example.graduationprojectbe.mapper.DataMapper;
 import com.example.graduationprojectbe.repository.MaterialRepository;
 import com.example.graduationprojectbe.repository.OrderMaterialRepository;
-import com.example.graduationprojectbe.request.ApproveOrderMaterialRequest;
+import com.example.graduationprojectbe.request.other.ApproveOrderMaterialRequest;
 import com.example.graduationprojectbe.response.StatusResponse;
 import com.example.graduationprojectbe.sercurity.ICurrentUserLmpl;
 import org.springframework.beans.factory.annotation.Autowired;

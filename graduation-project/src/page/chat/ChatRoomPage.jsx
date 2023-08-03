@@ -83,7 +83,7 @@ const MessageListStyled = styled.div`
 
 const ChatRoomPage = () => {
     const { auth } = useSelector((state) => state.auth);
-    const { setIsInviteMemberVisible, setSelectedRoomId, selectedRoomId,setSelectedMember, selectedMember } = useContext(ModalContext);
+    const { setIsInviteMemberVisible, setSelectedRoomId, selectedRoomId, setSelectedMember, selectedMember } = useContext(ModalContext);
     const [messages, setMessages] = useState([]);
     const [socket, setSocket] = useState(null);
     const [messageInput, setMessageInput] = useState("");
@@ -118,9 +118,11 @@ const ChatRoomPage = () => {
     }, [selectedRoomId])
 
     useEffect(() => {
-        getMember(selectedRoomId);
-        setSelectedMember(false);
-    }, [selectedRoomId, selectedMember,socketResponse])
+        if (selectedRoomId !== null) {
+            getMember(selectedRoomId);
+            setSelectedMember(false);
+        }
+    }, [selectedRoomId, selectedMember, socketResponse])
 
 
 
@@ -147,6 +149,10 @@ const ChatRoomPage = () => {
 
 
     const getMessage = async () => {
+
+        if (selectedRoomId === null) {
+            return;
+        }
         try {
             const rs = await axios.get(`http://localhost:8080/chat/api/v1/message/${selectedRoomId}`);
 
@@ -177,7 +183,7 @@ const ChatRoomPage = () => {
             };
             setMessages((prevMessages) => [...prevMessages, newMessage]);
         }
-      
+
 
         setMessageInput("");
     };
@@ -188,12 +194,12 @@ const ChatRoomPage = () => {
 
     const handleDelete = () => {
         deleteRoom(selectedRoomId)
-        .then(() => {
-            toast.error("Xóa Thành Công");
-        })
-        .catch((err) => {
-            toast.error(err.data.message);
-        })
+            .then(() => {
+                toast.error("Xóa Thành Công");
+            })
+            .catch((err) => {
+                toast.error(err.data.message);
+            })
     }
 
 

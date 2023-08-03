@@ -1,7 +1,7 @@
-import React from "react";
+import React, { createContext } from "react";
 import { useState } from "react";
 
-export const ModalContext = React.createContext();
+export const ModalContext = createContext();
 
 export default function ModalProvider({ children }) {
     const [isInviteMemberVisible, setIsInviteMemberVisible] = useState(false);

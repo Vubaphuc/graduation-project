@@ -9,25 +9,27 @@ export const useSocket = (roomId, userId) => {
     const [socketResponse, setSocketResponse] = useState([]);
 
     useEffect(() => {
-        if (roomId !== null && userId !== null) {
-            const s = io("http://localhost:8085", {
-                reconnection: false,
-                query: `userId=${userId}&roomId=${roomId}`,
-            });
-            setSocket(s);
-            s.on("connect", () => setConnected(true));
-            s.on("read_message", (res) => {
-                const message = {
-                    content: res.content,
-                    username: res.username,
-                    createdDateTime: res.createdDateTime,
-                }
-                setSocketResponse((prevMessages) => [...prevMessages, message]);
-            });           
-            return () => {
-                s.disconnect();
-            };
+        if (roomId === null || userId === null) {
+            return;
         }
+
+        const s = io("http://localhost:8085", {
+            reconnection: false,
+            query: `userId=${userId}&roomId=${roomId}`,
+        });
+        setSocket(s);
+        s.on("connect", () => setConnected(true));
+        s.on("read_message", (res) => {
+            const message = {
+                content: res.content,
+                username: res.username,
+                createdDateTime: res.createdDateTime,
+            }
+            setSocketResponse((prevMessages) => [...prevMessages, message]);
+        });
+        return () => {
+            s.disconnect();
+        };
     }, [roomId, userId])
 
     const sendData = useCallback(
@@ -45,22 +47,22 @@ export const useSocket = (roomId, userId) => {
 
     const addMember = useCallback(
         (payload) => {
-            
+
             if (socket) {
                 console.log(roomId)
                 socket.emit("add_member", {
                     roomId: roomId,
                     membersIds: payload.membersIds,
                 });
-                
+
             }
         },
         [socket, roomId]
     );
 
-   
 
-    
+
+
 
     return {
         socketResponse, isConnected, sendData, socket, addMember

@@ -1,16 +1,13 @@
 package com.example.graduationprojectbe.controller.receptionist;
 
-import com.example.graduationprojectbe.request.CreateBillAndGuaranteeRequest;
-import com.example.graduationprojectbe.request.CreateProductRequest;
-import com.example.graduationprojectbe.request.InformationEngineerRequest;
-import com.example.graduationprojectbe.request.UpdateReceiptRequest;
+import com.example.graduationprojectbe.request.create.CreateBillAndGuaranteeRequest;
+import com.example.graduationprojectbe.request.create.CreateProductRequest;
+import com.example.graduationprojectbe.request.other.InformationEngineerRequest;
+import com.example.graduationprojectbe.request.update.UpdateReceiptRequest;
 import com.example.graduationprojectbe.service.receptionist.ProductService;
 import com.itextpdf.text.DocumentException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

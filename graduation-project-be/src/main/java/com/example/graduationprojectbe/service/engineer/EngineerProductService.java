@@ -14,7 +14,7 @@ import com.example.graduationprojectbe.mapper.DataMapper;
 import com.example.graduationprojectbe.repository.ComponentsRepository;
 import com.example.graduationprojectbe.repository.ProductGuaranteeRepository;
 import com.example.graduationprojectbe.repository.ProductRepository;
-import com.example.graduationprojectbe.request.InformationRepairRequest;
+import com.example.graduationprojectbe.request.other.InformationRepairRequest;
 import com.example.graduationprojectbe.response.StatusResponse;
 import com.example.graduationprojectbe.sercurity.ICurrentUserLmpl;
 import org.springframework.beans.factory.annotation.Autowired;

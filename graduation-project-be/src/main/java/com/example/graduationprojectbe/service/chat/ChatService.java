@@ -1,33 +1,24 @@
 package com.example.graduationprojectbe.service.chat;
 
-import com.corundumstudio.socketio.SocketIOClient;
-import com.example.graduationprojectbe.constants.MessageStatus;
 import com.example.graduationprojectbe.dto.dto.MessageDto;
 import com.example.graduationprojectbe.dto.dto.RoomDto;
-import com.example.graduationprojectbe.dto.dto.UserDto;
-import com.example.graduationprojectbe.dto.projection.MessageInfo;
 import com.example.graduationprojectbe.dto.projection.RoomInfo;
 import com.example.graduationprojectbe.entity.Message;
 import com.example.graduationprojectbe.entity.Room;
 import com.example.graduationprojectbe.entity.User;
 import com.example.graduationprojectbe.exception.NotFoundException;
 import com.example.graduationprojectbe.mapper.DataMapper;
-import com.example.graduationprojectbe.mapper.UserMapper;
 import com.example.graduationprojectbe.repository.MessageRepository;
 import com.example.graduationprojectbe.repository.RoomRepository;
 import com.example.graduationprojectbe.repository.UserRepository;
-import com.example.graduationprojectbe.request.AddMemberRequest;
-import com.example.graduationprojectbe.request.CreateRoomRequest;
+import com.example.graduationprojectbe.request.other.AddMemberRequest;
+import com.example.graduationprojectbe.request.create.CreateRoomRequest;
 import com.example.graduationprojectbe.response.StatusResponse;
-import com.example.graduationprojectbe.sercurity.ICurrentUser;
 import com.example.graduationprojectbe.sercurity.ICurrentUserLmpl;
-import com.example.graduationprojectbe.service.socket.SocketService;
-import org.apache.xmlbeans.impl.xb.xsdschema.Attribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

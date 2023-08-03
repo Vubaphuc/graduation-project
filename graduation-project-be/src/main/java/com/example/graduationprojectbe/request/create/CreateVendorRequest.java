@@ -1,4 +1,4 @@
-package com.example.graduationprojectbe.request;
+package com.example.graduationprojectbe.request.create;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminUpdatePasswordRequest {
-    @NotNull(message = "password cannot be blank")
-    private String password;
+public class CreateVendorRequest {
+    @NotNull(message = "name cannot be blank")
+    private String name;
 }

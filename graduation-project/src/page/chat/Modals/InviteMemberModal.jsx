@@ -25,7 +25,9 @@ export default function InviteMemberModal() {
 
 
     useEffect(() => {
-        getMember(selectedRoomId)
+        if(selectedRoomId !== null) {
+            getMember(selectedRoomId)
+        } 
     }, [selectedRoomId])
 
     if (isLoading) {

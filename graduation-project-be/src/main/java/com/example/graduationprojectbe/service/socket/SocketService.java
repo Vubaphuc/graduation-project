@@ -2,26 +2,20 @@ package com.example.graduationprojectbe.service.socket;
 
 
 import com.corundumstudio.socketio.SocketIOClient;
-import com.corundumstudio.socketio.SocketIONamespace;
-import com.corundumstudio.socketio.SocketIOServer;
-import com.example.graduationprojectbe.constants.MessageStatus;
 import com.example.graduationprojectbe.dto.dto.MessageDto;
 import com.example.graduationprojectbe.entity.Message;
 import com.example.graduationprojectbe.entity.Room;
 import com.example.graduationprojectbe.entity.User;
-import com.example.graduationprojectbe.exception.NotFoundException;
 import com.example.graduationprojectbe.mapper.DataMapper;
 import com.example.graduationprojectbe.repository.MessageRepository;
 import com.example.graduationprojectbe.repository.RoomRepository;
 import com.example.graduationprojectbe.repository.UserRepository;
-import com.example.graduationprojectbe.request.AddMemberRequest;
-import com.example.graduationprojectbe.request.MessageRequest;
+import com.example.graduationprojectbe.request.other.MessageRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

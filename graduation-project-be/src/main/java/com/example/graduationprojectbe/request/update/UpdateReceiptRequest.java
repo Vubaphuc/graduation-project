@@ -1,4 +1,4 @@
-package com.example.graduationprojectbe.request;
+package com.example.graduationprojectbe.request.update;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -6,11 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateBillAndGuaranteeRequest {
-    @NotNull(message = "product Id cannot be blank")
-    private Integer productId;
+public class UpdateReceiptRequest {
+    @NotNull(message = "Pay Date cannot be blank")
+    private LocalDateTime payDate;
 }

@@ -1,8 +1,8 @@
 package com.example.graduationprojectbe.controller.admin;
 
-import com.example.graduationprojectbe.request.AdminCreateEmployeeRequest;
-import com.example.graduationprojectbe.request.AdminUpdateInformationEmployeeRequest;
-import com.example.graduationprojectbe.request.AdminUpdatePasswordRequest;
+import com.example.graduationprojectbe.request.create.AdminCreateEmployeeRequest;
+import com.example.graduationprojectbe.request.update.AdminUpdateInformationEmployeeRequest;
+import com.example.graduationprojectbe.request.update.AdminUpdatePasswordRequest;
 import com.example.graduationprojectbe.service.admin.EmployeeManageService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

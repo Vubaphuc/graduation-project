@@ -2,9 +2,7 @@ package com.example.graduationprojectbe.service.receptionist;
 
 import com.example.graduationprojectbe.config.GenerateCode;
 import com.example.graduationprojectbe.constants.Status;
-import com.example.graduationprojectbe.dto.dto.ProductNameModelLimitDto;
 import com.example.graduationprojectbe.dto.page.PageDto;
-import com.example.graduationprojectbe.dto.projection.ProductGuaranteeProjection;
 import com.example.graduationprojectbe.dto.projection.ProductProjection;
 import com.example.graduationprojectbe.dto.projection.ReceiptInfo;
 import com.example.graduationprojectbe.entity.*;
@@ -12,16 +10,15 @@ import com.example.graduationprojectbe.exception.BadRequestException;
 import com.example.graduationprojectbe.exception.NotFoundException;
 import com.example.graduationprojectbe.mapper.DataMapper;
 import com.example.graduationprojectbe.repository.*;
-import com.example.graduationprojectbe.request.CreateBillAndGuaranteeRequest;
-import com.example.graduationprojectbe.request.CreateProductRequest;
-import com.example.graduationprojectbe.request.InformationEngineerRequest;
-import com.example.graduationprojectbe.request.UpdateReceiptRequest;
+import com.example.graduationprojectbe.request.create.CreateBillAndGuaranteeRequest;
+import com.example.graduationprojectbe.request.create.CreateProductRequest;
+import com.example.graduationprojectbe.request.other.InformationEngineerRequest;
+import com.example.graduationprojectbe.request.update.UpdateReceiptRequest;
 import com.example.graduationprojectbe.response.StatusResponse;
 import com.example.graduationprojectbe.sercurity.ICurrentUserLmpl;
 import com.example.graduationprojectbe.service.auth.EmailService;
 import com.example.graduationprojectbe.service.auth.PDFService;
 import com.itextpdf.text.DocumentException;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,7 +27,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class ProductService {

@@ -1,4 +1,4 @@
-package com.example.graduationprojectbe.request;
+package com.example.graduationprojectbe.request.other;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -11,10 +11,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequest {
+public class ForgotPasswordRequest {
     @NotNull(message = "email cannot be blank")
     @Email(message = "Invalid email")
     private String email;
-    @NotNull(message = "password cannot be blank")
-    private String password;
 }

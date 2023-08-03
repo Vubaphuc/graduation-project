@@ -1,39 +1,21 @@
 package com.example.graduationprojectbe.service.auth;
 
-import com.example.graduationprojectbe.dto.dto.UserDto;
-import com.example.graduationprojectbe.entity.Image;
 import com.example.graduationprojectbe.entity.User;
 import com.example.graduationprojectbe.exception.BadRequestException;
 import com.example.graduationprojectbe.exception.NotFoundException;
-import com.example.graduationprojectbe.mapper.DataMapper;
 import com.example.graduationprojectbe.mapper.UserMapper;
-import com.example.graduationprojectbe.repository.ImageRepository;
 import com.example.graduationprojectbe.repository.UserRepository;
-import com.example.graduationprojectbe.request.ChangePasswordRequest;
-import com.example.graduationprojectbe.request.ForgotPasswordRequest;
-import com.example.graduationprojectbe.request.LoginRequest;
-import com.example.graduationprojectbe.request.UpdatePersonalInformationRequest;
+import com.example.graduationprojectbe.request.other.LoginRequest;
 import com.example.graduationprojectbe.response.AuthResponse;
-import com.example.graduationprojectbe.response.StatusResponse;
-import com.example.graduationprojectbe.sercurity.ICurrentUserLmpl;
 import com.example.graduationprojectbe.sercurity.JwtUtils;
 import com.example.graduationprojectbe.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Random;
 
 @Service
 public class AuthService {

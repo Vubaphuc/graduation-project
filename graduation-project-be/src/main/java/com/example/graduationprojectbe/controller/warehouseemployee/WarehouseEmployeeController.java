@@ -1,6 +1,10 @@
 package com.example.graduationprojectbe.controller.warehouseemployee;
 
-import com.example.graduationprojectbe.request.*;
+import com.example.graduationprojectbe.request.create.CreateComponentsRequest;
+import com.example.graduationprojectbe.request.create.CreateMaterialRequest;
+import com.example.graduationprojectbe.request.create.CreateVendorRequest;
+import com.example.graduationprojectbe.request.update.UpdateComponentRequest;
+import com.example.graduationprojectbe.request.update.UpdateMaterialRequest;
 import com.example.graduationprojectbe.service.warehouseemployee.WarehouseEmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +33,7 @@ public class WarehouseEmployeeController {
     }
 
     @PutMapping("uppdate-component/{id}")
-    public ResponseEntity<?> updateComponentById (@Valid @RequestBody UpdateComponentRequest request,@PathVariable Integer id) {
+    public ResponseEntity<?> updateComponentById (@Valid @RequestBody UpdateComponentRequest request, @PathVariable Integer id) {
         return ResponseEntity.ok(warehouseEmployeeService.updateComponentById(request, id));
     }
 

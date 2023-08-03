@@ -1,4 +1,4 @@
-package com.example.graduationprojectbe.request;
+package com.example.graduationprojectbe.request.create;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateVendorRequest {
+public class CreateComponentsRequest {
     @NotNull(message = "name cannot be blank")
     private String name;
+    @NotNull(message = "warrantyPeriod cannot be blank")
+    private Integer warrantyPeriod;
 }

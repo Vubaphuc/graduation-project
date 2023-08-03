@@ -7,10 +7,10 @@ import Footer from "./Footer";
 import SidebarChat from "./SidebarChat";
 import ChatRoomPage from "../page/chat/ChatRoomPage";
 import { Col, Row } from "antd";
+import hookFetchQuery from "../page/hookForm/hook/hookAccount/hookFetchQuery";
 
 function LayoutChat () {
-    const { auth } = useSelector((state) => state.auth);
-
+    const { auth } = hookFetchQuery();
     const roles = auth.roles.map((role) => role.name);
     const isAdmin = roles.includes("ADMIN");
 

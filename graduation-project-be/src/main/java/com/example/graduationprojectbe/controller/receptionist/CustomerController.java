@@ -1,12 +1,11 @@
 package com.example.graduationprojectbe.controller.receptionist;
 
-import com.example.graduationprojectbe.request.CreateCustomerRequest;
-import com.example.graduationprojectbe.request.UpdateCustomerRequest;
+import com.example.graduationprojectbe.request.create.CreateCustomerRequest;
+import com.example.graduationprojectbe.request.update.UpdateCustomerRequest;
 import com.example.graduationprojectbe.service.receptionist.CustomerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

@@ -1,26 +1,14 @@
 package com.example.graduationprojectbe.service.socket;
 
-import com.corundumstudio.socketio.SocketIOClient;
-import com.corundumstudio.socketio.SocketIONamespace;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
-import com.example.graduationprojectbe.constants.MessageStatus;
-import com.example.graduationprojectbe.dto.dto.RoomDto;
-import com.example.graduationprojectbe.entity.Room;
-import com.example.graduationprojectbe.entity.User;
-import com.example.graduationprojectbe.mapper.DataMapper;
 import com.example.graduationprojectbe.repository.RoomRepository;
 import com.example.graduationprojectbe.repository.UserRepository;
-import com.example.graduationprojectbe.request.AddMemberRequest;
-import com.example.graduationprojectbe.request.MessageRequest;
+import com.example.graduationprojectbe.request.other.MessageRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Component
 @Slf4j

@@ -1,6 +1,6 @@
 package com.example.graduationprojectbe.controller.engineer;
 
-import com.example.graduationprojectbe.request.InformationRepairRequest;
+import com.example.graduationprojectbe.request.other.InformationRepairRequest;
 import com.example.graduationprojectbe.service.engineer.EngineerProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

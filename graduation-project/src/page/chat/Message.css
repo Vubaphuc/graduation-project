@@ -12,13 +12,11 @@
     margin-left: auto;
     margin-bottom: 10px;
     text-align: right;
-    color: #333;
-    font-size: 16px;
 }
 
 .content {
     font-weight: 600;
-    font-size: 16px;
+    font-size: 18px;
 }
 
 .user-name {

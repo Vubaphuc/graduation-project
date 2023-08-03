@@ -1,4 +1,4 @@
-package com.example.graduationprojectbe.request;
+package com.example.graduationprojectbe.request.update;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;

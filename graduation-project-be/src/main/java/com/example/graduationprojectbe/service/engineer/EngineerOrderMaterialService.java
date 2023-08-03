@@ -4,7 +4,6 @@ import com.example.graduationprojectbe.config.GenerateCode;
 import com.example.graduationprojectbe.dto.page.PageDto;
 import com.example.graduationprojectbe.dto.projection.MaterialProjection;
 import com.example.graduationprojectbe.dto.projection.OrderMaterialProjection;
-import com.example.graduationprojectbe.entity.Components;
 import com.example.graduationprojectbe.entity.Material;
 import com.example.graduationprojectbe.entity.OrderMaterial;
 import com.example.graduationprojectbe.exception.BadRequestException;
@@ -12,8 +11,8 @@ import com.example.graduationprojectbe.exception.NotFoundException;
 import com.example.graduationprojectbe.mapper.DataMapper;
 import com.example.graduationprojectbe.repository.MaterialRepository;
 import com.example.graduationprojectbe.repository.OrderMaterialRepository;
-import com.example.graduationprojectbe.request.CreateOrderMaterialRequest;
-import com.example.graduationprojectbe.request.UpdateOrderMaterialRequest;
+import com.example.graduationprojectbe.request.create.CreateOrderMaterialRequest;
+import com.example.graduationprojectbe.request.update.UpdateOrderMaterialRequest;
 import com.example.graduationprojectbe.response.StatusResponse;
 import com.example.graduationprojectbe.sercurity.ICurrentUserLmpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +21,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import javax.xml.crypto.Data;
 
 @Service
 public class EngineerOrderMaterialService {

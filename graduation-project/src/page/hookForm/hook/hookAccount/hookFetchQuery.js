@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 
-const hookFetchQuery = (userId) => {
+const hookFetchQuery = () => {
 
     const [avatarUrl, setAvatarUrl] = useState("");
     const { auth, token } = useSelector((state) => state.auth);
@@ -13,9 +13,8 @@ const hookFetchQuery = (userId) => {
 
     useEffect(() => {
         getAvatar();
-    },[])
+    },[auth])
 
-    console.log(userId)
 
     const getAvatar = async () => {
         try {
@@ -42,7 +41,7 @@ const hookFetchQuery = (userId) => {
     }
 
     return {
-        auth,avatarUrl, token
+        auth, avatarUrl, token
     }
 
 }

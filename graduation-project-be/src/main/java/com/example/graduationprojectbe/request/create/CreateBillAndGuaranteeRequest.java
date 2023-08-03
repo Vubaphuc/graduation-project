@@ -1,4 +1,4 @@
-package com.example.graduationprojectbe.request;
+package com.example.graduationprojectbe.request.create;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateOrderMaterialRequest {
-    @NotNull(message = "quantity cannot be blank")
-    private Integer quantity;
+public class CreateBillAndGuaranteeRequest {
+    @NotNull(message = "product Id cannot be blank")
+    private Integer productId;
 }

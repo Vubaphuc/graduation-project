@@ -8,6 +8,7 @@ import { Option } from "antd/es/mentions";
 import { useCreateRoomMutation } from "../../../app/apis/employee/chatApi";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import Item from "antd/es/list/Item";
 
 function AddRoomModal() {
     const { auth } = useSelector((state) => state.auth);
@@ -68,7 +69,7 @@ function AddRoomModal() {
     }))
 
     const filteredOptions = data.filter(option =>
-        option.name.toLowerCase().includes(searchValue.toLowerCase()) && option.name !== auth.employeeName
+        option.name.toLowerCase().includes(searchValue.toLowerCase()) && option.name !== auth?.employeeName
     );
 
     return (
@@ -82,9 +83,9 @@ function AddRoomModal() {
                 closeIcon={false}
             >
                 <Form form={form} layout="vertical">
-                    <Form.Item label="Tên Phòng" name="name">
+                    <Item label="Tên Phòng" name="name" className="mb-4 mt-4">
                         <Input placeholder="Nhập Tên Phòng" />
-                    </Form.Item>
+                    </Item>
                     <Select
                         showSearch
                         style={{ width: '100%' }}
@@ -94,6 +95,7 @@ function AddRoomModal() {
                         onChange={handleSelectChange}
                         onSearch={handleSearch}
                         filterOption={false}
+                        className="mb-4"
                     >
                         {searchValue && filteredOptions.map((option) => (
                             <Option key={option.id} value={option.id}>

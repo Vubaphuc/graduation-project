@@ -1,4 +1,4 @@
-package com.example.graduationprojectbe.request;
+package com.example.graduationprojectbe.request.create;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -10,11 +10,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApproveOrderMaterialRequest {
+public class CreateOrderMaterialRequest {
     @NotNull(message = "material code cannot be blank")
     private String materialCode;
     @NotNull(message = "quantity cannot be blank")
     private Integer quantity;
-    @NotNull(message = "status cannot be blank")
-    private boolean status;
 }

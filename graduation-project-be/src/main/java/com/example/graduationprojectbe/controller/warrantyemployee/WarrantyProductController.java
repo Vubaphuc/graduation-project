@@ -1,12 +1,11 @@
 package com.example.graduationprojectbe.controller.warrantyemployee;
 
-import com.example.graduationprojectbe.request.CreateBillAndGuaranteeRequest;
-import com.example.graduationprojectbe.request.InformationEngineerRequest;
-import com.example.graduationprojectbe.request.RegisterProductGuaranteeRequest;
-import com.example.graduationprojectbe.request.UpdateReceiptRequest;
+import com.example.graduationprojectbe.request.create.CreateBillAndGuaranteeRequest;
+import com.example.graduationprojectbe.request.other.InformationEngineerRequest;
+import com.example.graduationprojectbe.request.other.RegisterProductGuaranteeRequest;
+import com.example.graduationprojectbe.request.update.UpdateReceiptRequest;
 import com.example.graduationprojectbe.service.warrantyemployee.WarrantyProductService;
 import com.itextpdf.text.DocumentException;
-import jakarta.persistence.Id;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
 package com.example.graduationprojectbe.controller.warehouseemployee;
 
-import com.example.graduationprojectbe.request.ApproveOrderMaterialRequest;
+import com.example.graduationprojectbe.request.other.ApproveOrderMaterialRequest;
 import com.example.graduationprojectbe.service.warehouseemployee.ApproverOrderMaterialService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

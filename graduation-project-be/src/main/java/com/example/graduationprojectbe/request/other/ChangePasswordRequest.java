@@ -1,4 +1,4 @@
-package com.example.graduationprojectbe.request;
+package com.example.graduationprojectbe.request.other;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
