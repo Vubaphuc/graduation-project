@@ -1,19 +1,15 @@
 package com.example.graduationprojectbe.service.employee;
 
 import com.example.graduationprojectbe.dto.dto.UserDto;
+import com.example.graduationprojectbe.dto.page.PageDto;
 import com.example.graduationprojectbe.dto.projection.EmployeeInfo;
-import com.example.graduationprojectbe.entity.Bill;
-import com.example.graduationprojectbe.entity.Image;
-import com.example.graduationprojectbe.entity.Product;
-import com.example.graduationprojectbe.entity.User;
+import com.example.graduationprojectbe.dto.projection.ProductProjection;
+import com.example.graduationprojectbe.entity.*;
 import com.example.graduationprojectbe.exception.BadRequestException;
 import com.example.graduationprojectbe.exception.NotFoundException;
 import com.example.graduationprojectbe.mapper.DataMapper;
 import com.example.graduationprojectbe.mapper.UserMapper;
-import com.example.graduationprojectbe.repository.BillRepository;
-import com.example.graduationprojectbe.repository.ImageRepository;
-import com.example.graduationprojectbe.repository.ProductRepository;
-import com.example.graduationprojectbe.repository.UserRepository;
+import com.example.graduationprojectbe.repository.*;
 import com.example.graduationprojectbe.request.ChangePasswordRequest;
 import com.example.graduationprojectbe.request.ForgotPasswordRequest;
 import com.example.graduationprojectbe.request.UpdatePersonalInformationRequest;
@@ -24,6 +20,8 @@ import com.example.graduationprojectbe.service.auth.EmailService;
 import com.example.graduationprojectbe.service.auth.PDFService;
 import com.itextpdf.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,6 +32,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -56,9 +57,21 @@ public class EmployeeService {
     @Autowired
     private PDFService pdfService;
     @Autowired
-    private ProductRepository productRepository;
+    private BillGuaranteeRepository billGuaranteeRepository;
     @Autowired
-    private ExcelExporterService excelExporterService;
+    private ReceiptRepository receiptRepository;
+    @Autowired
+    private ReceiptGuaranteeRepository receiptGuaranteeRepository;
+    @Autowired
+    private ProductRepository productRepository;
+
+
+
+    //lấy thông tin nhân viên theo id
+    public UserDto findEmployeeById(Integer id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("Not Found With ID: "+ id));
+        return UserMapper.toUserDto(user);
+    }
 
 
     // lấy danh sách nhân viên sửa chữa
@@ -185,11 +198,12 @@ public class EmployeeService {
     // lấy ảnh đại diện user theo id
     public Image getAvatarById(Integer id) {
         // kểm tra xem id có phải id user đang login không
-        if (iCurrentUserLmpl.getUser().getId() != id) {
-            throw new BadRequestException("ID: " + id + " not your ID");
-        }
+//        if (iCurrentUserLmpl.getUser().getId() != id) {
+//            throw new BadRequestException("ID: " + id + " not your ID");
+//        }
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("Not Found With ID: " + id));
         // kiểm tra xem user đã có avater hay chưa
-        if (iCurrentUserLmpl.getUser().getAvatar() == null) {
+        if (user.getAvatar() == null) {
             try {
                 Path path = Paths.get("src/main/resources/static/images/avatar-mac-dinh.png");
                 byte[] defaultImageData = Files.readAllBytes(path);
@@ -206,7 +220,7 @@ public class EmployeeService {
             }
         }
         // nếu có thì trả về image của user
-        Image image = imageRepository.findById(iCurrentUserLmpl.getUser().getAvatar().getId())
+        Image image = imageRepository.findById(user.getAvatar().getId())
                 .orElseThrow(() -> new NotFoundException("Not Found with id = " + id));
 
         return image;
@@ -220,4 +234,75 @@ public class EmployeeService {
     }
 
 
+    public byte[] exportBillGuaranteeToPdf(Integer id) throws DocumentException, IOException {
+        BillGuarantee bill = billGuaranteeRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Not Found With id: " + id));
+        return pdfService.convertBillGuaranteeToPdf(bill);
+    }
+
+
+    public byte[] exportReceiptToPdf(Integer id) throws DocumentException, IOException {
+        Receipt receipt = receiptRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Not Found With ID: " + id));
+        return pdfService.convertReceiptToPdf(receipt);
+    }
+
+    public byte[] exportReceiptGuaranteeToPdf(Integer id) throws DocumentException, IOException {
+        ReceiptGuarantee receiptGuarantee = receiptGuaranteeRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Not Found With ID: " + id));
+        return pdfService.convertReceiptGuaranteeToPdf(receiptGuarantee);
+    }
+
+    public PageDto searchHistoryProduct(Integer page, Integer pageSize, LocalDateTime startDate, LocalDateTime endDate, String term) {
+
+        if (startDate == null && endDate == null && term.isEmpty()) {
+            return new PageDto(0,0,0,0,new ArrayList<>());
+        }
+
+        if (startDate == null && term.isEmpty() || endDate == null && term.isEmpty()) {
+
+            return new PageDto(0,0,0,0,new ArrayList<>());
+        }
+
+        if (startDate == null && term != "" || endDate == null && term != "") {
+
+            Page<ProductProjection> products = productRepository.searchHistoryProductByTerm(PageRequest.of(page - 1, pageSize), term);
+
+            return new PageDto(
+                    products.getNumber() + 1,
+                    products.getSize(),
+                    products.getTotalPages(),
+                    (int) Math.ceil(products.getTotalElements()),
+                    products.getContent()
+            );
+        }
+
+
+        if (term.isEmpty()) {
+
+            Page<ProductProjection> products = productRepository.searchHistoryProductByStartDateAndEndDate(PageRequest.of(page - 1, pageSize), startDate.with(LocalTime.MIN), endDate.with(LocalTime.MAX));
+
+            return new PageDto(
+                    products.getNumber() + 1,
+                    products.getSize(),
+                    products.getTotalPages(),
+                    (int) Math.ceil(products.getTotalElements()),
+                    products.getContent()
+            );
+        }
+
+        Page<ProductProjection> products = productRepository.searchHistoryProduct(PageRequest.of(page - 1, pageSize), startDate.with(LocalTime.MIN), endDate.with(LocalTime.MAX), term);
+
+        return new PageDto(
+                products.getNumber() + 1,
+                products.getSize(),
+                products.getTotalPages(),
+                (int) Math.ceil(products.getTotalElements()),
+                products.getContent()
+        );
+    }
+
+    public List<EmployeeInfo> getAllUsers() {
+        return userRepository.getAllUsers();
+    }
 }

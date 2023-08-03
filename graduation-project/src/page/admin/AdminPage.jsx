@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import ReactPaginate from "react-paginate";
-import { useFindStatisticsTotalProductTodayQuery, useFindTotalProductByEngineerYesterdayAllQuery, useLazyFindProductOKAllQuery, useLazyFindProductPendingAllQuery } from "../../app/apis/admin/productManageApi";
+import { useFindStatisticsTotalProductTodayQuery, useFindTotalProductByEngineerAllQuery, useFindTotalProductByEngineerYesterdayAllQuery, useLazyFindProductOKAllQuery, useLazyFindProductPendingAllQuery, useLazyFindProductsWaitingForRepairAllQuery } from "../../app/apis/admin/productManageApi";
 import chartBar from "../chartjs/chartBar";
 import { Bar } from "react-chartjs-2";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -12,10 +12,11 @@ function AdminPage() {
 
 
     const { data: productSummaryDate, isLoading: productSummaryLoading } = useFindStatisticsTotalProductTodayQuery();
-    const { data: productEngiData } = useFindTotalProductByEngineerYesterdayAllQuery();
+    const { data: productEngiData } = useFindTotalProductByEngineerAllQuery();
     const { data: productEngiYesterDayData } = useFindTotalProductByEngineerYesterdayAllQuery();
     const [getProductOk, { data: productOkData }] = useLazyFindProductOKAllQuery();
     const [getProductPending, { data: productPendingData }] = useLazyFindProductPendingAllQuery();
+    const [getProdcutForReturn, { data: productForReturnData }] = useLazyFindProductsWaitingForRepairAllQuery();
 
     useEffect(() => {
         getProductOk({
@@ -26,6 +27,13 @@ function AdminPage() {
 
     useEffect(() => {
         getProductPending({
+            page: 1,
+            pageSize: 5
+        })
+    }, [])
+
+    useEffect(() => {
+        getProdcutForReturn({
             page: 1,
             pageSize: 5
         })
@@ -63,6 +71,13 @@ function AdminPage() {
 
     const handlePageClickPending = (page) => {
         getProductPending({
+            page: page.selected + 1,
+            pageSize: 5
+        })
+    }
+
+    const handlePageClickForReturn = (page) => {
+        getProdcutForReturn({
             page: page.selected + 1,
             pageSize: 5
         })
@@ -245,6 +260,67 @@ function AdminPage() {
                             <p>Không có sản phẩm nào!!!</p>
                         )}
                     </div>
+
+                </div>
+                <div className="pt-4 px-4">
+                    <div className="text-center rounded p-4 table-table">
+                        <div className="d-flex align-items-center justify-content-between mb-4">
+                            <h6 className="mb-0">Danh Sách Sản Phẩm Chờ trả khách</h6>
+                        </div>
+                        {productForReturnData && productForReturnData.data.length > 0 ? (
+                            <div className="table-responsive">
+                                <table className="table text-start align-middle table-bordered table-hover mb-0">
+                                    <thead>
+                                        <tr className="text-white">
+                                            <th scope="col">Date</th>
+                                            <th scope="col">IME</th>
+                                            <th scope="col">Employee Code</th>
+                                            <th scope="col">Employee Name</th>
+                                            <th scope="col">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {productForReturnData.data.map((product, index) => (
+                                            <tr key={index}>
+                                                <td>{product.outputDate ? new Date(product.outputDate).toLocaleDateString() : new Date(product.inputDate).toLocaleDateString()}</td>
+                                                <td>{product.ime}</td>
+                                                <td>{product.engineer ? product.engineer.employeeCode : product.receptionists.employeeCode}</td>
+                                                <td>{product.engineer ? product.engineer.employeeName : product.receptionists.employeeName}</td>
+                                                <td>{getStatusLabel(product.status)}</td> 
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                                <div
+                                    className="d-flex justify-content-center mt-3"
+                                    id="pagination"
+                                >
+                                    <ReactPaginate
+                                        nextLabel="next >"
+                                        onPageChange={handlePageClickForReturn}
+                                        pageRangeDisplayed={3}
+                                        marginPagesDisplayed={2}
+                                        pageCount={productForReturnData?.totalPages}
+                                        previousLabel="< previous"
+                                        pageClassName="page-item"
+                                        pageLinkClassName="page-link"
+                                        previousClassName="page-item"
+                                        previousLinkClassName="page-link"
+                                        nextClassName="page-item"
+                                        nextLinkClassName="page-link"
+                                        breakLabel="..."
+                                        breakClassName="page-item"
+                                        breakLinkClassName="page-link"
+                                        containerClassName="pagination"
+                                        activeClassName="active"
+                                        renderOnZeroPageCount={null}
+                                    />
+                                </div>
+                            </div>
+                        ) : (
+                            <p>Không có sản phẩm nào!!!</p>
+                        )}
+                    </div>                  
                 </div>
                 <div className="footer">
                 </div>

@@ -1,5 +1,7 @@
 package com.example.graduationprojectbe.request;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +12,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginRequest {
+    @NotNull(message = "email cannot be blank")
+    @Email(message = "Invalid email")
     private String email;
+    @NotNull(message = "password cannot be blank")
     private String password;
 }

@@ -1,9 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useCreateBillMutation, useFindProductByIDQuery, useLazyExportBillToPdfQuery } from "../../../../app/apis/receptionist/productApi";
+import { useCreateBillMutation, useFindProductByIDQuery } from "../../../../app/apis/receptionist/productApi";
 import { toast } from "react-toastify";
-import { PDFDownloadLink, Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
-import html2pdf from "html2pdf.js";
 import { useSelector } from "react-redux";
 
 
@@ -28,7 +26,6 @@ function RecepBillCreate() {
   }, []);
 
   const { data: productData, isLoading: productLoading } = useFindProductByIDQuery(productId);
-  const [exportPDF] = useLazyExportBillToPdfQuery();
   const [createBill] = useCreateBillMutation();
 
   if (productLoading) {
@@ -42,7 +39,7 @@ function RecepBillCreate() {
       .then((res) => {
         toast.success("Tạo Hóa Đơn Thành Công");
         setTimeout(() => {
-          navigate(`/receptionist/pdf/${res.data.id}`);        
+          navigate(`/receptionist/pdf/${res.data.id}`);
         }, 1500);
       })
       .catch((err) => {
@@ -98,13 +95,17 @@ function RecepBillCreate() {
                 <td>IME</td>
                 <td>{productData?.ime}</td>
               </tr>
-              <tr className="row-data row-botton-boder">
+              <tr className="row-data">
                 <td>Quantity</td>
                 <td>1</td>
               </tr>
+              <tr className="row-data row-botton-boder">
+                <td>Price</td>
+                <td>{productData?.price.toLocaleString("vi-VN") + " VND"}</td>
+              </tr>
               <tr className="calc-row">
                 <td>Total</td>
-                <td>{productData?.price.toLocaleString("vi-VN") + " VND"}</td>
+                <td>{(productData?.price * 1).toLocaleString("vi-VN") + " VND"}</td>
               </tr>
             </tbody>
           </table>
@@ -116,8 +117,8 @@ function RecepBillCreate() {
           </Link>
           <button className="btn btn-primary" onClick={handleClickCreateBill}>
             PAY NOW
-          </button>        
-        </div>       
+          </button>
+        </div>
       </div>
 
     </>

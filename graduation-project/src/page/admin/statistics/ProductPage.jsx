@@ -250,6 +250,9 @@ function ProductPage() {
         exportToExcel(deliveredData.data)
     }
 
+
+    console.log(forReturnData)
+
     return (
         <>
              <div className="pt-4 px-4">
@@ -641,8 +644,9 @@ function ProductPage() {
                                     <tr className="text-white">
                                         <th scope="col">Date</th>
                                         <th scope="col">IME</th>
-                                        <th scope="col">Employee Code</th>
-                                        <th scope="col">Employee Name</th>
+                                        <th scope="col">Customer Name</th>
+                                        <th scope="col">Customer Email</th>
+                                        <th scope="col">Customer Phone Number</th>
                                         <th scope="col">Status</th>
                                     </tr>
                                 </thead>
@@ -651,8 +655,9 @@ function ProductPage() {
                                         <tr key={index}>
                                             <td>{new Date(product.createGuaranteeDate).toLocaleDateString()}</td>
                                             <td>{product.ime}</td>
-                                            <td>{product.productPayer.employeeCode}</td>
-                                            <td>{product.productPayer.employeeName}</td>
+                                            <td>{product.customer.fullName}</td>
+                                            <td>{product.customer.email}</td>
+                                            <td>{product.customer.phoneNumber}</td>
                                             <td>{getStatusLabel(product.status)}</td>
                                         </tr>
                                     ))}

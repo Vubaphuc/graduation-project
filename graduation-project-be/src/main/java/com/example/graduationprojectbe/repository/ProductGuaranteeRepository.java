@@ -47,6 +47,12 @@ public interface ProductGuaranteeRepository extends JpaRepository<ProductGuarant
     @Query("select pg from ProductGuarantee pg where pg.ime like %?1% and pg.status = ?2 and pg.delete = true and pg.repair = true ")
     Page<ProductGuaranteeProjection> findProductGuaranteeWaitingForReturnAll(Pageable pageable, String term, Status status);
 
+    @Query("select pg from ProductGuarantee pg where pg.ime like %?1% and pg.status = ?2 and pg.delete = true and pg.repair = true order by pg.inputDate asc ")
+    Page<ProductGuaranteeProjection> findProductUnderRepairAll(Pageable pageable, String term, Status status);
+
+    @Query("select pg from ProductGuarantee pg left join ReceiptGuarantee rg on rg.productGuarantee.id = pg.id where rg.productGuarantee.id is null and pg.ime like %?1% ")
+    Page<ProductGuaranteeProjection> findProductNoCreateReceiptAll(Pageable pageable, String term);
+
     // #################################################################################
     //########################## Nhân Viên sửa chữa #########################################
 
@@ -82,4 +88,7 @@ public interface ProductGuaranteeRepository extends JpaRepository<ProductGuarant
 
     @Query("select pg from ProductGuarantee pg where pg.status = :status and (pg.inputDate between :startDate and :endDate ) and pg.delete = true ")
     Page<ProductGuaranteeProjection> findProductGuaranteeDeliveredAll_ADMIN(Pageable pageable,@Param("startDate") LocalDateTime startDate,@Param("endDate") LocalDateTime endDate,@Param("status") Status status);
+
+
+
 }

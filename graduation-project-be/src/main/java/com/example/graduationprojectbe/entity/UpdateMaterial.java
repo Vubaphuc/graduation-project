@@ -17,7 +17,9 @@ public class UpdateMaterial {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
+    @Column(name = "quantity")
     private Integer quantity;
+    @Column(name = "update_date")
     private LocalDateTime updateDate;
 
     @ManyToOne(fetch = FetchType.LAZY)

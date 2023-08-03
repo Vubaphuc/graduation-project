@@ -6,6 +6,7 @@ import com.example.graduationprojectbe.request.ForgotPasswordRequest;
 import com.example.graduationprojectbe.request.LoginRequest;
 import com.example.graduationprojectbe.request.UpdatePersonalInformationRequest;
 import com.example.graduationprojectbe.service.auth.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("login")
-    public ResponseEntity<?> login (@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login (@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
     }
 }

@@ -79,6 +79,8 @@ function MaterialManageList() {
         })
     }
 
+
+
     return (
         <>
             <div className="pt-4 px-4">
@@ -127,7 +129,7 @@ function MaterialManageList() {
                             <table className="table text-start align-middle table-bordered table-hover mb-0">
                                 <thead>
                                     <tr className="text-white">
-                                        <th scope="col">Ngày Order</th>
+                                        <th scope="col">Ngày Create</th>
                                         <th scope="col">Mã Vật Liệu</th>
                                         <th scope="col">Số Lượng Import</th>
                                         <th scope="col">Số Lượng Export</th>

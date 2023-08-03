@@ -32,6 +32,8 @@ function RecepGuaranteeCreate () {
             })
     }
 
+    console.log(productData)
+
     return (
         <>
             <section className="content">
@@ -164,7 +166,7 @@ function RecepGuaranteeCreate () {
                                                     type="text"
                                                     className="form-control"
                                                     id="thanh-tien"
-                                                    defaultValue={productData ? productData.price.toLocaleString("vi-VN") + " VND" : ""}
+                                                    defaultValue={productData ? productData?.price.toLocaleString("vi-VN") + " VND" : ""}
                                                     readOnly
                                                 />
                                             </div>

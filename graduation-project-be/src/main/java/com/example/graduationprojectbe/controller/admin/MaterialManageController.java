@@ -67,4 +67,11 @@ public class MaterialManageController {
         return ResponseEntity.ok(materialManageService.findMaterialRemainingQuantityLimit());
     }
 
+
+    @GetMapping("materials-update")
+    public ResponseEntity<?> findMaterialUpdate (@RequestParam(defaultValue = "1") Integer page,
+                                                 @RequestParam(defaultValue = "10") Integer pageSize) {
+        return ResponseEntity.ok(materialManageService.findMaterialUpdate(page,pageSize));
+    }
+
 }

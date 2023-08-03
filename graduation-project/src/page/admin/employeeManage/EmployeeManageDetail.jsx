@@ -3,9 +3,10 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import Select from "react-select";
 import { getAddress } from "../../formHTML/options";
 import addressQuery from "../../formHTML/address";
-import { useDeleteEmployeeByIdMutation, useFindEmployeeByIdQuery } from "../../../app/apis/admin/employeeManageApi";
-import hookAdminInformationEmployee from "../../hookForm/hook/hookAdmin/hookAdminInformationEmployee";
+import { useDeleteEmployeeByIdMutation, useEnabledEmployeeByIdMutation, useFindEmployeeByIdQuery } from "../../../app/apis/admin/employeeManageApi";
 import hookAdminUpdatePassword from "../../hookForm/hook/hookAdmin/hookAdminUpdatePassword";
+import hookAdminInformationEmployee from "../../hookForm/hook/hookAdmin/hookAdminInformationEmployee";
+import { toast } from "react-toastify";
 
 function EmployeeManageDetail () {
     const { employeeId } = useParams();
@@ -19,6 +20,7 @@ function EmployeeManageDetail () {
     const { register: registerPassword, handleSubmit: handleSubmitPassword, errors: errorsPassword, onUpdatePassword } = hookAdminUpdatePassword(employeeId);
 
     const { data: employeeData, isLoading: employeeLoading } = useFindEmployeeByIdQuery(employeeId);
+    const [enabledEmployee] = useEnabledEmployeeByIdMutation();
 
 
 
@@ -51,6 +53,22 @@ function EmployeeManageDetail () {
     }
 
 
+    const handleEnabledEmployee = (id) => {
+        event.preventDefault();
+        enabledEmployee(id)
+        .unwrap()
+        .then(() => {
+            toast.success("Mở User Thành Công");
+            setTimeout(() => {
+                navigate("/admin/employees")
+            });
+        })
+        .catch((err) => {
+            toast.error(err.data.message);
+        })
+    }
+
+
 
     return (
         <>
@@ -64,13 +82,24 @@ function EmployeeManageDetail () {
                             >
                                 <i className="fas fa-chevron-left"></i> Quay lại
                             </Link>
-                            <button
+                            {employeeData?.enabled ? (
+                                <button
                                 type="button"
                                 className="btn btn-danger px-4"
                                 onClick={() => handleDeleteEmployee(employeeData?.id)}
                             >
                                 xóa
                             </button>
+                            ) : (
+                                <button
+                                type="button"
+                                className="btn btn-info px-4"
+                                onClick={() => handleEnabledEmployee(employeeData?.id)}
+                            >
+                                Mở Khóa
+                            </button>
+                            )}
+                            
                         </div>
                     </div>
                     <div className="container mt-5 mb-5">

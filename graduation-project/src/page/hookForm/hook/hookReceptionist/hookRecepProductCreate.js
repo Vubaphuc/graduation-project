@@ -4,10 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { createProductSchema } from "../../schemas/ReceptionistSchemas";
 import { useCreateProductMutation } from "../../../../app/apis/receptionist/productApi";
 import { toast } from "react-toastify";
+import { useState } from "react";
+
 
 
 const hookRecepProductCreate = () => {
     const navigate = useNavigate();
+    const [check, setCheck] = useState(false);
 
     const [createProduct] = useCreateProductMutation();
 
@@ -19,10 +22,11 @@ const hookRecepProductCreate = () => {
     const onCreateProduct = (data) => {
         createProduct(data)
         .unwrap()
-        .then(() => {
+        .then((res) => {
             toast.success("Đăng ký Thành công");
+            setCheck(true)
             setTimeout(() => {
-                navigate("/receptionist/transfer-product")
+                navigate(`/receptionist/receipt/${res.data.id}`)
             }, 1500)
         })
         .catch((err) => {
@@ -31,7 +35,7 @@ const hookRecepProductCreate = () => {
     }
 
     return {
-        control, register, handleSubmit, errors, onCreateProduct
+        control, register, handleSubmit, errors, onCreateProduct, check, setCheck
     }
 
 }

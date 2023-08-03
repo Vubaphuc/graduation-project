@@ -35,6 +35,18 @@ export const getEmployees = (employees) => {
     });
 }
 
+export const getUsers = (employees) => {
+    if (!employees) {
+        return [];
+    }
+    return employees.map((employee) => {
+        return {
+            label: employee.employeeName,
+            value: employee.id,
+        };
+    });
+}
+
 export const getTypeOptions = () => {
     return [
         { label: "OK", value: "OK" },

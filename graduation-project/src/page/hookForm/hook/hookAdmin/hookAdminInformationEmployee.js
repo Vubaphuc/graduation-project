@@ -3,6 +3,7 @@ import { useUpdateInformationEmployeeByIdMutation } from "../../../../app/apis/a
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { updateInformationSchema } from "../../schemas/adminSchemas";
+import { useNavigate } from "react-router-dom";
 
 const hookAdminInformationEmployee = () => {
     const navigate = useNavigate();

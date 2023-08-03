@@ -3,6 +3,7 @@ package com.example.graduationprojectbe.controller.receptionist;
 import com.example.graduationprojectbe.request.CreateCustomerRequest;
 import com.example.graduationprojectbe.request.UpdateCustomerRequest;
 import com.example.graduationprojectbe.service.receptionist.CustomerService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,7 +17,7 @@ public class CustomerController {
 
     // tạo khách hàng mới
     @PostMapping("create-customer")
-    public ResponseEntity<?> createCustomer (@RequestBody CreateCustomerRequest request) {
+    public ResponseEntity<?> createCustomer (@Valid @RequestBody CreateCustomerRequest request) {
         return ResponseEntity.ok(customerService.createCustomer(request));
     }
     // lấy ra khàng hàng theo id
@@ -45,7 +46,7 @@ public class CustomerController {
 
     // cập nhật thông tin nhân viên
     @PutMapping("customer/{id}")
-    public ResponseEntity<?> updateCustomerById(@RequestBody UpdateCustomerRequest request, @PathVariable Integer id) {
+    public ResponseEntity<?> updateCustomerById(@Valid @RequestBody UpdateCustomerRequest request, @PathVariable Integer id) {
         return ResponseEntity.ok(customerService.updateCustomerById(request, id));
     }
     // xóa khách hàng theo id

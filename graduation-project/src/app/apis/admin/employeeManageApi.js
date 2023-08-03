@@ -60,6 +60,13 @@ export const employeeManageApi = createApi ({
             }),
             invalidatesTags: ['Employees'],
         }),
+        enabledEmployeeById: builder.mutation ({
+            query: (id) => ({
+                url: `enabled-employee/${id}`,
+                method: "PUT"
+            }),
+            invalidatesTags: ['Employees']
+        }),
     }),
 });;
 
@@ -70,5 +77,6 @@ export const {
         useCreateEmployeeMutation,
         useUpdateInformationEmployeeByIdMutation,
         useUpdatePasswordAccEmployeeByIdMutation,
-        useDeleteEmployeeByIdMutation
+        useDeleteEmployeeByIdMutation,
+        useEnabledEmployeeByIdMutation
 } = employeeManageApi;

@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -71,8 +72,8 @@ public interface MaterialRepository extends JpaRepository<Material, Integer> {
     @Query("select m from Material m where m.code like %?1% ")
     Page<MaterialProjection> findMaterialsAll(Pageable pageable, String term);
 
-    @Query("select m from Material m where ( m.createDate between ?1 and ?2 ) and m.code like %?3% ")
-    Page<MaterialProjection> findMaterialsAllByStartDateAndEndDate(Pageable pageable, LocalDateTime startDate, LocalDateTime endDate, String term);
+    @Query("select m from Material m where ( m.createDate between :startDate and :endDate ) and m.code like %:term% ")
+    Page<MaterialProjection> findMaterialsAllByStartDateAndEndDate(Pageable pageable, @Param("startDate") LocalDateTime startDate,@Param("endDate") LocalDateTime endDate,@Param("term") String term);
 
     @Query("select m from Material m order by m.remainingQuantity desc ")
     List<MaterialProjection> findMaterialRemainingQuantityLimit();

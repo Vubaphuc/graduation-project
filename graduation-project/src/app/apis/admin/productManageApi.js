@@ -77,6 +77,10 @@ export const productManageApi = createApi ({
             query: () => "total-product-engineer",
             providesTags: ['Product'],
         }),
+        findProductsWaitingForRepairAll: builder.query ({
+            query: ({page,pageSize}) => `products-for-return?page=${page}&pageSize=${pageSize}`,
+            providesTags: ['Product']
+        }),
     }),
 
 })
@@ -97,4 +101,5 @@ export const {
    useFindCustomerByProductLimitQuery,
    useFindTotalProductOkAndPendingQuery,
    useFindTotalProductByEngineerQuery,
+   useLazyFindProductsWaitingForRepairAllQuery
 } = productManageApi;

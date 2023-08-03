@@ -69,7 +69,8 @@ public class SecurityConfig {
                "/visitor/**",
                 "public/api/**",
                 "/employee/api/v1/**",
-                "/excel/api/v1/**"
+                "/excel/api/v1/**",
+                "/chat/api/v1/**"
         };
 
         String [] NHANVIENLETAN = {

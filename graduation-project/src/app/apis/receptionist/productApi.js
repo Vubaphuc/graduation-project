@@ -54,7 +54,7 @@ export const productApi = createApi ({
                 url: "create-product",
                 method: "POST",
                 body: data,
-            }),
+            }),           
             invalidatesTags: ['Receptionist'],
         }),
         findProductPendingAll: builder.query ({
@@ -84,7 +84,37 @@ export const productApi = createApi ({
             }),
             invalidatesTags: ['Receptionist'],
         }),
-       
+        createReceipt: builder.mutation({
+            query: (id) => ({
+                url: `receipt/${id}`,
+                method: "POST",
+            }),
+            invalidatesTags: ['Receptionist'],
+        }),
+        findReceiptAll: builder.query ({
+            query: ({page, pageSize, term}) => `receipts?page=${page}&pageSize=${pageSize}&term=${term}`,
+            providesTags: ['Receptionist'],
+        }),
+        findReceiptById: builder.query ({
+            query: (id) => `receipt/${id}`,
+            providesTags: ['Receptionist'],
+        }),
+        updateReceiptById: builder.mutation({
+            query: ({id,...data}) => ({
+                url: `receipt/${id}`,
+                method: "PUT",
+                body: data
+            }),
+            invalidatesTags: ['Receptionist'],
+        }),
+        findReceiptStatusTrueAll: builder.query ({
+            query: ({page, pageSize, term}) => `receipts-no?page=${page}&pageSize=${pageSize}&term=${term}`,
+            providesTags: ['Receptionist'],
+        }),
+        findProductNoCreateReceiptAll: builder.query ({
+            query: ({page, pageSize, term}) => `no-create-receipts?page=${page}&pageSize=${pageSize}&term=${term}`,
+            providesTags: ['Receptionist'],
+        }),
     }),
 });;
 
@@ -100,4 +130,10 @@ export const {
     useDeletePorductBtIDMutation,
     useCreateBillMutation,
     useCreateNewGuaranteeMutation,
+    useCreateReceiptMutation,
+    useLazyFindReceiptAllQuery,
+    useFindReceiptByIdQuery,
+    useUpdateReceiptByIdMutation,
+    useLazyFindReceiptStatusTrueAllQuery,
+    useLazyFindProductNoCreateReceiptAllQuery,
 } = productApi;

@@ -6,6 +6,7 @@ import com.example.graduationprojectbe.dto.dto.OrderMaterialDto;
 import com.example.graduationprojectbe.dto.dto.ProductNameModelLimitDto;
 import com.example.graduationprojectbe.dto.dto.VendorCountDto;
 import com.example.graduationprojectbe.dto.projection.MaterialProjection;
+import com.example.graduationprojectbe.dto.projection.UpdateMaterialInfo;
 import com.example.graduationprojectbe.entity.*;
 import com.example.graduationprojectbe.repository.*;
 import jakarta.persistence.*;
@@ -47,6 +48,8 @@ public class ExcelExporterService {
     private BillRepository billRepository;
     @Autowired
     private BillGuaranteeRepository billGuaranteeRepository;
+    @Autowired
+    private UpdateMaterialRepository updateMaterialRepository;
 
 
 
@@ -149,6 +152,8 @@ public class ExcelExporterService {
 
     // export excel product guarantee
     public File exportProductGuaranteeToExcel() {
+
+        List<Integer> ids = new ArrayList<>();
 
         List<ProductGuarantee> productGuarantees = productGuaranteeRepository.findAll();
         String filePath = "ProductGuarantee.xlsx";
@@ -679,6 +684,59 @@ public class ExcelExporterService {
 
             // Tự động điều chỉnh cột cho phù hợp
             for (int i = 0; i < 12; i++) {
+                sheet.autoSizeColumn(i);
+            }
+            // Ghi file Excel
+            try (FileOutputStream outputStream = new FileOutputStream(excelFile)) {
+                workbook.write(outputStream);
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return excelFile;
+    }
+
+    public File exportMaterialUpdateToExcel() {
+        List<UpdateMaterial> materials = updateMaterialRepository.findAll();
+        String filePath = "Material.xlsx";
+
+        File excelFile = new File(filePath);
+
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("Material Data");
+
+
+            // Tạo header cho file Excel
+            Row headerRow = sheet.createRow(0);
+            headerRow.createCell(0).setCellValue("Update Date");
+            headerRow.createCell(1).setCellValue("Material Code");
+            headerRow.createCell(2).setCellValue("Quantity");
+            headerRow.createCell(3).setCellValue("Employee Update Code");
+            headerRow.createCell(4).setCellValue("Employee Update Name");
+
+
+
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            // Đổ dữ liệu từ danh sách sản phẩm vào file Excel
+            int rowNum = 1;
+            for (UpdateMaterial material : materials) {
+
+                String updateDate = material.getUpdateDate() != null ? material.getUpdateDate().toLocalDate().format(format) : "";
+
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue(updateDate);
+                row.createCell(1).setCellValue(material.getMaterial().getCode());
+                row.createCell(2).setCellValue(material.getQuantity());
+                row.createCell(3).setCellValue(material.getEmployeeUpdate().getEmployeeCode());
+                row.createCell(4).setCellValue(material.getEmployeeUpdate().getEmployeeName());
+
+            }
+
+            // Tự động điều chỉnh cột cho phù hợp
+            for (int i = 0; i < 5; i++) {
                 sheet.autoSizeColumn(i);
             }
             // Ghi file Excel

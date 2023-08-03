@@ -2,6 +2,7 @@ package com.example.graduationprojectbe.controller.warehouseemployee;
 
 import com.example.graduationprojectbe.request.*;
 import com.example.graduationprojectbe.service.warehouseemployee.WarehouseEmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,22 +24,22 @@ public class WarehouseEmployeeController {
     }
 
     @PostMapping("components/create")
-    public ResponseEntity<?> createComponents (@RequestBody CreateComponentsRequest request) {
+    public ResponseEntity<?> createComponents (@Valid @RequestBody CreateComponentsRequest request) {
         return ResponseEntity.ok(warehouseEmployeeService.createComponents(request));
     }
 
     @PutMapping("uppdate-component/{id}")
-    public ResponseEntity<?> updateComponentById (@RequestBody UpdateComponentRequest request,@PathVariable Integer id) {
+    public ResponseEntity<?> updateComponentById (@Valid @RequestBody UpdateComponentRequest request,@PathVariable Integer id) {
         return ResponseEntity.ok(warehouseEmployeeService.updateComponentById(request, id));
     }
 
     @PostMapping("material/create")
-    public ResponseEntity<?> createMaterial (@RequestBody CreateMaterialRequest request) {
+    public ResponseEntity<?> createMaterial (@Valid @RequestBody CreateMaterialRequest request) {
         return ResponseEntity.ok(warehouseEmployeeService.createMaterial(request));
     }
     // cập nhật số lượng vật liệu
     @PutMapping("material/{id}")
-    public ResponseEntity<?> updateMaterialById (@RequestBody UpdateMaterialRequest request, @PathVariable Integer id) {
+    public ResponseEntity<?> updateMaterialById (@Valid @RequestBody UpdateMaterialRequest request, @PathVariable Integer id) {
         return ResponseEntity.ok(warehouseEmployeeService.updateMaterialById(request,id));
     }
 
@@ -64,7 +65,7 @@ public class WarehouseEmployeeController {
 
     // Tạo mới 1 vender
     @PostMapping("vendor/create")
-    public ResponseEntity<?> createVendor (@RequestBody CreateVendorRequest request) {
+    public ResponseEntity<?> createVendor (@Valid @RequestBody CreateVendorRequest request) {
         return ResponseEntity.ok(warehouseEmployeeService.createVendor(request));
     }
 
@@ -82,7 +83,7 @@ public class WarehouseEmployeeController {
 
     // sửa tên vender
     @PutMapping("update-vendor/{id}")
-    public ResponseEntity<?> updateNameVendor (@RequestBody CreateVendorRequest request ,@PathVariable Integer id) {
+    public ResponseEntity<?> updateNameVendor (@Valid @RequestBody CreateVendorRequest request ,@PathVariable Integer id) {
         return ResponseEntity.ok(warehouseEmployeeService.updateNameVendor(request,id));
     }
 

@@ -44,18 +44,20 @@ public class ProductManageService {
         return userRepository.findEmployeeEngineerAll()
                 .stream()
                 .map(user -> {
-                    long totalOK = productRepository.countTotalProductOKByEmployeeCode(user.getEmployeeCode(), Status.REPAIRED);
+                    long totalOK = productRepository.countTotalProductOKByEmployeeCode(user.getEmployeeCode());
                     long totalPending = productRepository.countTotalProductPendingByEmployeeCode(user.getEmployeeCode(), Status.UNDER_REPAIR);
                     return DataMapper.toTotalProductDto(user,totalOK,totalPending);
                 }).collect(Collectors.toList());
     }
 
     public List<TotalProductDto> findTotalProductByEngineerYesterdayAll() {
+
         LocalDate previousDate = LocalDate.now().minusDays(1);
+
         return userRepository.findEmployeeEngineerAll()
                 .stream()
                 .map(user -> {
-                    long totalOK = productRepository.countTotalProductOKYesterdayByEmployeeCode(user.getEmployeeCode(), previousDate, Status.REPAIRED);
+                    long totalOK = productRepository.countTotalProductOKYesterdayByEmployeeCode(user.getEmployeeCode(), previousDate);
                     long totalPending = productRepository.countTotalProductPendingYesterdayByEmployeeCode(user.getEmployeeCode(),Status.UNDER_REPAIR, Status.REPAIRED);
                     return DataMapper.toTotalProductDto(user,totalOK,totalPending);
                 }).collect(Collectors.toList());
@@ -89,8 +91,23 @@ public class ProductManageService {
         );
     }
 
+    // lấy tất cả danh sách Sản Phẩm chờ trả khách
+    public PageDto findProductWaitingForReturnAll(Integer page, Integer pageSize) {
+
+        Page<ProductProjection> products = productRepository.findProductWaitingForReturnAll(PageRequest.of(page - 1, pageSize), Status.WAITING_FOR_RETURN);
+
+        return new PageDto(
+                products.getNumber() + 1,
+                products.getSize(),
+                products.getTotalPages(),
+                (int) Math.ceil(products.getTotalElements()),
+                products.getContent()
+        );
+    }
+
+
     // danh sách sản phẩm theo chờ sửa chữa
-    public PageDto findProductWaitingForRepairAll(Integer page, Integer pageSize, LocalDateTime startDate, LocalDateTime endDate) {
+    public PageDto findProductsWaitingForRepairAll(Integer page, Integer pageSize, LocalDateTime startDate, LocalDateTime endDate) {
 
         if (startDate == null && endDate == null) {
 

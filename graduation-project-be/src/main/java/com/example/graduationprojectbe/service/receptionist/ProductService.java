@@ -4,7 +4,9 @@ import com.example.graduationprojectbe.config.GenerateCode;
 import com.example.graduationprojectbe.constants.Status;
 import com.example.graduationprojectbe.dto.dto.ProductNameModelLimitDto;
 import com.example.graduationprojectbe.dto.page.PageDto;
+import com.example.graduationprojectbe.dto.projection.ProductGuaranteeProjection;
 import com.example.graduationprojectbe.dto.projection.ProductProjection;
+import com.example.graduationprojectbe.dto.projection.ReceiptInfo;
 import com.example.graduationprojectbe.entity.*;
 import com.example.graduationprojectbe.exception.BadRequestException;
 import com.example.graduationprojectbe.exception.NotFoundException;
@@ -13,6 +15,7 @@ import com.example.graduationprojectbe.repository.*;
 import com.example.graduationprojectbe.request.CreateBillAndGuaranteeRequest;
 import com.example.graduationprojectbe.request.CreateProductRequest;
 import com.example.graduationprojectbe.request.InformationEngineerRequest;
+import com.example.graduationprojectbe.request.UpdateReceiptRequest;
 import com.example.graduationprojectbe.response.StatusResponse;
 import com.example.graduationprojectbe.sercurity.ICurrentUserLmpl;
 import com.example.graduationprojectbe.service.auth.EmailService;
@@ -49,6 +52,8 @@ public class ProductService {
     private PDFService pdfService;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private ReceiptRepository receiptRepository;
 
 
     // lấy ra danh sách sản phẩm đã sửa chữa ok chờ trả khách có phaân trang - 4
@@ -221,6 +226,8 @@ public class ProductService {
 
     // tạo hóa đơn
     public StatusResponse createBill(CreateBillAndGuaranteeRequest request) throws DocumentException, IOException {
+        // lấy ra biên lai nhận sản phẩm
+        Receipt receipt = receiptRepository.findByProduct_Id(request.getProductId()).orElseThrow(() -> new NotFoundException("Not Found With ID: " + request.getProductId()));
 
         // lấy ra sản phẩm theo id
         Product product = productRepository.findById(request.getProductId()).orElseThrow(() -> new NotFoundException("Not Found with id : " + request.getProductId()));
@@ -242,12 +249,100 @@ public class ProductService {
         // lưu vào csdl
         billRepository.save(bill);
 
+        // cập nhật lại thông tin biên lai nhận sản phẩm
+        receipt.setStatus(false);
+        receiptRepository.save(receipt);
+
         emailService.sendPDFMail(bill.getProduct().getCustomer().getEmail(), "Hóa Đơn Sửa Chữa", "Gửi Khách Hàng Chi tiết thông tin hóa đơn", pdfService.convertBillToPdf(bill));
 
         return new StatusResponse(HttpStatus.CREATED,
                 "registered guarantee successfully",
                 DataMapper.toDataResponse(bill.getId(), bill.getProduct().getNameModel()));
 
+    }
+
+
+    // tạo biên lai thu nhận sản phẩm
+    public StatusResponse createReceipt(Integer id) throws DocumentException, IOException {
+
+        if (receiptRepository.findByProduct_Id(id).isPresent()) {
+            throw new BadRequestException("generated receipt");
+        }
+
+        Product product = productRepository.findById(id).orElseThrow(() -> new NotFoundException("Not Found With ID: " + id));
+
+        Receipt receipt = Receipt.builder()
+                .createDate(LocalDateTime.now())
+                .quantity(1)
+                .status(true)
+                .employeeCreate(iCurrentUserLmpl.getUser())
+                .product(product)
+                .build();
+
+        receiptRepository.save(receipt);
+
+        emailService.sendPDFMail(receipt.getProduct().getCustomer().getEmail(),
+                "Biên Lai Thu Nhận Sản phẩm", "Gửi Khách Hàng Chi tiết thông tin biên lai",
+                pdfService.convertReceiptToPdf(receipt));
+
+
+        return new StatusResponse(HttpStatus.CREATED, "Create Receipt success", DataMapper.toDataResponse(receipt.getId(), receipt.getProduct().getNameModel()));
+    }
+
+    public PageDto findReceiptAll(int page, int pageSize, String term) {
+
+        Page<ReceiptInfo> receipts = receiptRepository.findReceiptAll(PageRequest.of(page - 1, pageSize), term);
+
+        return new PageDto(
+                receipts.getNumber() + 1,
+                receipts.getSize(),
+                receipts.getTotalPages(),
+                (int) Math.ceil(receipts.getTotalElements()),
+                receipts.getContent()
+        );
+    }
+
+    public PageDto findReceiptStatusTrueAll(int page, int pageSize, String term) {
+
+        Page<ReceiptInfo> receipts = receiptRepository.findReceiptStatusTrueAll(PageRequest.of(page - 1, pageSize), term);
+
+        return new PageDto(
+                receipts.getNumber() + 1,
+                receipts.getSize(),
+                receipts.getTotalPages(),
+                (int) Math.ceil(receipts.getTotalElements()),
+                receipts.getContent()
+        );
+    }
+
+    public ReceiptInfo findReceiptById(Integer id) {
+        return receiptRepository.findReceiptById(id).orElseThrow(() -> new NotFoundException("Not Found With ID: " + id));
+    }
+
+    public StatusResponse updateReceiptById(UpdateReceiptRequest request, Integer id) {
+        Receipt receipt =  receiptRepository.findById(id).orElseThrow(() -> new NotFoundException("Not Found With ID: " + id));
+
+        if (!receipt.isStatus()) {
+            throw new BadRequestException("Updates are not allowed");
+        }
+
+        receipt.setPayDate(request.getPayDate());
+        receiptRepository.save(receipt);
+
+        return new StatusResponse(HttpStatus.OK, "Update Receipt success", DataMapper.toDataResponse(receipt.getId(), receipt.getProduct().getNameModel()));
+    }
+
+    public PageDto findProductNoCreateReceiptAll(int page, int pageSize, String term) {
+
+        Page<ProductProjection> products = productRepository.findProductNoCreateReceiptAll(PageRequest.of(page - 1, pageSize), term);
+
+        return new PageDto(
+                products.getNumber() + 1,
+                products.getSize(),
+                products.getTotalPages(),
+                (int) Math.ceil(products.getTotalElements()),
+                products.getContent()
+        );
     }
 
 

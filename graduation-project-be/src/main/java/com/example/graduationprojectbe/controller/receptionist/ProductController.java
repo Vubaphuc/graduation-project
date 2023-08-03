@@ -3,8 +3,10 @@ package com.example.graduationprojectbe.controller.receptionist;
 import com.example.graduationprojectbe.request.CreateBillAndGuaranteeRequest;
 import com.example.graduationprojectbe.request.CreateProductRequest;
 import com.example.graduationprojectbe.request.InformationEngineerRequest;
+import com.example.graduationprojectbe.request.UpdateReceiptRequest;
 import com.example.graduationprojectbe.service.receptionist.ProductService;
 import com.itextpdf.text.DocumentException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -54,7 +56,7 @@ public class ProductController {
 
     // đăng ký nhân viên sủa chữa
     @PutMapping("register-engineer/{id}")
-    public ResponseEntity<?> registerEngineerInformationByProduct(@RequestBody InformationEngineerRequest request, @PathVariable Integer id) {
+    public ResponseEntity<?> registerEngineerInformationByProduct(@Valid @RequestBody InformationEngineerRequest request, @PathVariable Integer id) {
         return ResponseEntity.ok(productService.registerEngineerInformationByProduct(request, id));
     }
 
@@ -71,7 +73,7 @@ public class ProductController {
 
     // tạo sản phẩm mới
     @PostMapping("create-product")
-    public ResponseEntity<?> createProduct (@RequestBody CreateProductRequest requet) {
+    public ResponseEntity<?> createProduct (@Valid @RequestBody CreateProductRequest requet) {
         return ResponseEntity.ok(productService.createProduct(requet));
     }
 
@@ -93,14 +95,53 @@ public class ProductController {
 
     // đăng ký bảo hành cho sản phẩm
     @PostMapping("guarantee-create")
-    public ResponseEntity<?> createNewGuarantee (@RequestBody CreateBillAndGuaranteeRequest request) {
+    public ResponseEntity<?> createNewGuarantee (@Valid @RequestBody CreateBillAndGuaranteeRequest request) {
         return ResponseEntity.ok(productService.createNewWarranty(request));
     }
 
     // tạo hóa đơn
     @PostMapping("create-bill")
-    public ResponseEntity<?> createBill(@RequestBody CreateBillAndGuaranteeRequest request) throws DocumentException, IOException {
+    public ResponseEntity<?> createBill(@Valid @RequestBody CreateBillAndGuaranteeRequest request) throws DocumentException, IOException {
         return ResponseEntity.ok(productService.createBill(request));
+    }
+
+    // tạo biên lai thu nhận sản phẩm
+    @PostMapping("receipt/{id}")
+    public ResponseEntity<?> createReceipt (@PathVariable Integer id) throws DocumentException, IOException {
+        return ResponseEntity.ok(productService.createReceipt(id));
+    }
+
+    @GetMapping("receipts")
+    public ResponseEntity<?> findReceiptAll(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(defaultValue = "") String term) {
+        return ResponseEntity.ok(productService.findReceiptAll(page, pageSize,term));
+    }
+    @GetMapping("receipts-no")
+    public ResponseEntity<?> findReceiptStatusTrueAll(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(defaultValue = "") String term) {
+        return ResponseEntity.ok(productService.findReceiptStatusTrueAll(page, pageSize,term));
+    }
+
+    @GetMapping("no-create-receipts")
+    public ResponseEntity<?> findProductNoCreateReceiptAll(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(defaultValue = "") String term) {
+        return ResponseEntity.ok(productService.findProductNoCreateReceiptAll(page, pageSize,term));
+    }
+
+    @GetMapping("receipt/{id}")
+    public ResponseEntity<?> findReceiptById (@PathVariable Integer id) {
+        return ResponseEntity.ok(productService.findReceiptById(id));
+    }
+
+    @PutMapping("receipt/{id}")
+    public ResponseEntity<?> updateReceiptById (@Valid @RequestBody UpdateReceiptRequest request , @PathVariable Integer id) {
+        return ResponseEntity.ok(productService.updateReceiptById(request,id));
     }
 
 }

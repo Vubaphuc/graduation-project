@@ -14,6 +14,7 @@ import { employeeManageApi } from "./apis/admin/employeeManageApi";
 import { materialManageApi } from "./apis/admin/materialManageApi";
 import { productManageApi } from "./apis/admin/productManageApi";
 import { productGuaranteeManageApi } from "./apis/admin/productGuaranteeManageApi";
+import { chatApi } from "./apis/employee/chatApi";
 
 
 const store = configureStore ({
@@ -33,6 +34,7 @@ const store = configureStore ({
         [materialManageApi.reducerPath]: materialManageApi.reducer,
         [productManageApi.reducerPath]: productManageApi.reducer,
         [productGuaranteeManageApi.reducerPath]: productGuaranteeManageApi.reducer,
+        [chatApi.reducerPath]: chatApi.reducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(
         authApi.middleware,
@@ -49,6 +51,7 @@ const store = configureStore ({
         materialManageApi.middleware,
         productManageApi.middleware,
         productGuaranteeManageApi.middleware,
+        chatApi.middleware
     ),
 
 });

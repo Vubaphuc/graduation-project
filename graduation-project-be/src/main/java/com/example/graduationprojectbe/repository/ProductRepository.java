@@ -3,6 +3,7 @@ package com.example.graduationprojectbe.repository;
 import com.example.graduationprojectbe.constants.Status;
 import com.example.graduationprojectbe.dto.dto.*;
 import com.example.graduationprojectbe.dto.projection.CustomerSearchInfo;
+import com.example.graduationprojectbe.dto.projection.ProductGuaranteeProjection;
 import com.example.graduationprojectbe.dto.projection.ProductInfo;
 import com.example.graduationprojectbe.dto.projection.ProductProjection;
 import com.example.graduationprojectbe.entity.Product;
@@ -110,14 +111,17 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "from Product p where p.delete = true ")
     ProductSummaryDto findStatisticsTotalProductToday(@Param("Delivered") Status Delivered);
 
+    @Query("select p from Product p left join Receipt r on r.product.id = p.id where r.product.id is null and p.ime like %?1% ")
+    Page<ProductProjection> findProductNoCreateReceiptAll(Pageable pageable, String term);
+
 
     // #################################################################################
     //########################## ADMIN #########################################
     @Query("select count(p) from Product p " +
             "join p.engineer u " +
             "join u.roles rl " +
-            "where u.employeeCode = ?1 and rl.name = 'NHANVIENSUACHUA' and p.status = ?2 and function('DATE', p.outputDate) = current_date and p.delete = true ")
-    long countTotalProductOKByEmployeeCode(String employeeCode, Status repaired);
+            "where u.employeeCode = ?1 and rl.name = 'NHANVIENSUACHUA' and function('DATE', p.outputDate) = current_date and p.delete = true ")
+    long countTotalProductOKByEmployeeCode(String employeeCode);
 
     @Query("select count(p) from Product p " +
             "join p.engineer u " +
@@ -128,8 +132,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("select count(p) from Product p " +
             "join p.engineer u " +
             "join u.roles rl " +
-            "where u.employeeCode = :employeeCode and rl.name = 'NHANVIENSUACHUA' and p.status = :repaired and function('DATE', p.outputDate) = :previousDate and p.delete = true ")
-    long countTotalProductOKYesterdayByEmployeeCode(@Param("employeeCode") String employeeCode,@Param("previousDate") LocalDate previousDate,@Param("repaired") Status repaired);
+            "where u.employeeCode = :employeeCode and rl.name = 'NHANVIENSUACHUA' and function('DATE', p.outputDate) = :previousDate and p.delete = true ")
+    long countTotalProductOKYesterdayByEmployeeCode(@Param("employeeCode") String employeeCode,@Param("previousDate") LocalDate previousDate);
 
     @Query("select count(p) from Product p " +
             "join p.engineer u " +
@@ -186,4 +190,20 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "where p.status = ?1 " +
             "group by u.employeeCode, u.employeeName order by count (p.id)")
     List<TotalProductByEngineerDto> findTotalProductByEngineer(Status status);
+
+    @Query("select p from Product p where p.status = ?1 and p.delete = true ")
+    Page<ProductProjection> findProductWaitingForReturnAll(Pageable pageable, Status status);
+
+
+    // #################################################################################
+    //########################## Search #########################################
+
+    @Query("select p from Product p where p.ime like %?1% ")
+    Page<ProductProjection> searchHistoryProductByTerm(Pageable pageable, String term);
+
+    @Query("select p from Product p where p.inputDate between :startDate and :endDate ")
+    Page<ProductProjection> searchHistoryProductByStartDateAndEndDate(Pageable pageable, @Param("startDate") LocalDateTime startDate,@Param("endDate") LocalDateTime endDate);
+
+    @Query("select p from Product p where (p.inputDate between :startDate and :endDate) and p.ime like %:term% ")
+    Page<ProductProjection> searchHistoryProduct(Pageable pageable,@Param("startDate") LocalDateTime startDate,@Param("endDate") LocalDateTime endDate,@Param("term") String term);
 }

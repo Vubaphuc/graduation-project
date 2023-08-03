@@ -2,15 +2,31 @@ import React from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useCreateBillMutation, useFindProductGuaranteeByIDQuery } from "../../../../app/apis/warrantyEmoloyee/warrantyProductApi";
 import { toast } from "react-toastify";
-import { getStatusLabel } from "../../../formHTML/enum";
+import { useSelector } from "react-redux";
+import { useRef } from "react";
+import { useEffect } from "react";
+import { useState } from "react";
 
-function WarrantyBillCreate () {
+function WarrantyBillCreate() {
     const { productId } = useParams();
     const navigate = useNavigate();
+    const { auth } = useSelector((state) => state.auth);
+    const invoiceRef = useRef(null);
+    const [currentDate, setCurrentDate] = useState("");
+
+    useEffect(() => {
+        const getCurrentDate = () => {
+          const date = new Date();
+          const day = String(date.getDate()).padStart(2, "0");
+          const month = String(date.getMonth() + 1).padStart(2, "0");
+          const year = date.getFullYear();
+          return `${day}/${month}/${year}`;
+        };
+        setCurrentDate(getCurrentDate());
+      }, []);
 
 
     const { data: productData, isLoading: productLoading } = useFindProductGuaranteeByIDQuery(productId);
-
     const [createBill] = useCreateBillMutation();
 
     if (productLoading) {
@@ -18,13 +34,13 @@ function WarrantyBillCreate () {
     }
 
     const handleClickCreateBill = () => {
-        const data = {productId: productId}
+        const data = { productId: productId }
         createBill(data)
             .unwrap()
-            .then(() => {
+            .then((res) => {
                 toast.success("Tạo Hóa Đơn Thành Công");
                 setTimeout(() => {
-                    navigate("/warranty")
+                    navigate(`/warranty/pdf/${res.data.id}`)
                 }, 1500)
             })
             .catch((err) => {
@@ -34,158 +50,77 @@ function WarrantyBillCreate () {
 
     return (
         <>
-            <section className="content">
-                <div className="container-fluid">
-                    <div className="row py-2">
-                        <div className="col-6">
-                            <Link to={"/warranty"} className="btn btn-default">
-                                <i className="fas fa-chevron-left"></i> Quay lại
-                            </Link>
-                            <button
-                                type="button"
-                                className="btn btn-info px-4"
-                                onClick={handleClickCreateBill}
-                            >
-                                Tạo Hóa Đơn
-                            </button>
-                        </div>
+            <div className="invoice-card" ref={invoiceRef}>
+                <div className="invoice-title">
+                    <div id="main-title">
+                        <h4>INVOICE</h4>
                     </div>
-                    <div className="row">
-                        <div className="col-12">
-                            <div className="card">
-                                <div className="card-body">
-                                    <div className="table-sp-kh">
-                                        <div className="col-md-5">
-                                            <h4 className="mb-4">Hóa Đơn</h4>
-                                            <div className="form-group">
-                                                <label>ID Sản Phẩm</label>
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="maSanPham"
-                                                    defaultValue={productData?.id}
-                                                    readOnly
-                                                />
-                                            </div>
-                                            <div className="form-group">
-                                                <label>Họ Và Tên Khách Hàng</label>
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="fullNameKH"
-                                                    defaultValue={productData?.customer.fullName}
-                                                    readOnly
-                                                />
-                                            </div>
-                                            <div className="form-group">
-                                                <label>Số điện thoại</label>
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="phoneKH"
-                                                    defaultValue={productData?.customer.phoneNumber}
-                                                    readOnly
-                                                />
-                                            </div>
-
-                                            <div className="form-group">
-                                                <label>Hãng Sản Phẩm</label>
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="hangSanPham"
-                                                    defaultValue={productData?.phoneCompany}
-                                                    readOnly
-                                                />
-                                            </div>
-                                            <div className="form-group">
-                                                <label>Tên Model</label>
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="model"
-                                                    defaultValue={productData?.nameModel}
-                                                    readOnly
-                                                />
-                                            </div>
-                                            <div className="form-group">
-                                                <label>Số IME</label>
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="soIME"
-                                                    defaultValue={productData?.ime}
-                                                    readOnly
-                                                />
-                                            </div>
-                                            <div className="form-group">
-                                                <label>Tên Lỗi</label>
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="tenLoi"
-                                                    defaultValue={productData?.defectName}
-                                                    readOnly
-                                                />
-                                            </div>
-                                            <div className="form-group">
-                                                <label>Vị Trí Sửa</label>
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="viTriSua"
-                                                    defaultValue={productData?.location}
-                                                    readOnly
-                                                />
-                                            </div>
-                                            <div className="form-group">
-                                                <label>Loại Linh Kiện</label>
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="loaiBaoHanh"
-                                                    defaultValue={productData?.components.name}
-                                                    readOnly
-                                                />
-                                            </div>
-                                            <div className="form-group">
-                                                <label>Thời gian bảo hành</label>
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="thoiGianBaoHanh"
-                                                    defaultValue={productData?.components.warrantyPeriod + " Tháng"}
-                                                    readOnly
-                                                />
-                                            </div>
-                                            <div className="form-group">
-                                                <label>Thành Tiền</label>
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="thanh-tien"
-                                                    defaultValue={productData ? productData.price.toLocaleString("vi-VN") + " VND" : ""}
-                                                    readOnly
-                                                />
-                                            </div>
-                                            <div className="form-group">
-                                                <label>Trạng Thái</label>
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="thanh-tien"
-                                                    defaultValue={getStatusLabel(productData?.status)}
-                                                    readOnly
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <h6>{productData?.id}</h6>
+                    <span id="date">{currentDate}</span>
                 </div>
-            </section>
+
+                <div className="invoice-details">
+                    <table className="invoice-table">
+                        <thead>
+                            <tr>
+                                <td>INMATION</td>
+                                <td>DETAIL</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr className="row-data row-boder">
+                                <td>Creator ID</td>
+                                <td>{auth.employeeCode}</td>
+                            </tr>
+                            <tr className="row-data row-botton-boder">
+                                <td>Creator Name</td>
+                                <td>{auth.employeeName}</td>
+                            </tr>
+                            <tr className="row-data">
+                                <td>Customer Name</td>
+                                <td>{productData?.customer.fullName}</td>
+                            </tr>
+                            <tr className="row-data">
+                                <td>Phone</td>
+                                <td>{productData?.customer.phoneNumber}</td>
+                            </tr>
+                            <tr className="row-data row-botton-boder">
+                                <td>Email</td>
+                                <td>{productData?.customer.email}</td>
+                            </tr>
+                            <tr className="row-data">
+                                <td>Model Name</td>
+                                <td>{productData?.nameModel}</td>
+                            </tr>
+                            <tr className="row-data">
+                                <td>IME</td>
+                                <td>{productData?.ime}</td>
+                            </tr>
+                            <tr className="row-data">
+                                <td>Quantity</td>
+                                <td>1</td>
+                            </tr>
+                            <tr className="row-data row-botton-boder">
+                                <td>Price</td>
+                                <td>{productData?.price.toLocaleString("vi-VN") + " VND"}</td>
+                            </tr>
+                            <tr className="calc-row">
+                                <td>Total</td>
+                                <td>{(productData?.price * 1).toLocaleString("vi-VN") + " VND"}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div className="invoice-footer mt-3">
+                    <Link to={"/receptionist"} className="btn btn-secondary" id="later">
+                        BACK
+                    </Link>
+                    <button className="btn btn-primary" onClick={handleClickCreateBill}>
+                        PAY NOW
+                    </button>
+                </div>
+            </div>
         </>
     );
 }

@@ -2,7 +2,11 @@ package com.example.graduationprojectbe.repository;
 
 import com.example.graduationprojectbe.dto.dto.CustomerDto;
 import com.example.graduationprojectbe.dto.projection.CustomerInfo;
+import com.example.graduationprojectbe.dto.projection.CustomerProjection;
 import com.example.graduationprojectbe.entity.Customer;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -30,4 +34,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
             "where c.delete = true " +
             "group by c.id order by count(p) desc ")
     List<CustomerDto> productByCustomerAll();
+
+    @Query("select c from Customer c where (c.email like %?1% or c.phoneNumber like %?1% or c.fullName like %?1% ) and c.delete = true ")
+    Page<CustomerProjection> findProductByCustomers(Pageable pageable, String term);
 }

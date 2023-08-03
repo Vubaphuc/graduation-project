@@ -5,9 +5,11 @@ import com.example.graduationprojectbe.dto.dto.TotalMaterialDto;
 import com.example.graduationprojectbe.dto.page.PageDto;
 import com.example.graduationprojectbe.dto.projection.MaterialProjection;
 import com.example.graduationprojectbe.dto.projection.OrderMaterialProjection;
+import com.example.graduationprojectbe.dto.projection.UpdateMaterialInfo;
 import com.example.graduationprojectbe.exception.BadRequestException;
 import com.example.graduationprojectbe.repository.MaterialRepository;
 import com.example.graduationprojectbe.repository.OrderMaterialRepository;
+import com.example.graduationprojectbe.repository.UpdateMaterialRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +25,8 @@ public class MaterialManageService {
     private OrderMaterialRepository orderMaterialRepository;
     @Autowired
     private MaterialRepository materialRepository;
+    @Autowired
+    private UpdateMaterialRepository updateMaterialRepository;
 
 
     // danh sách order
@@ -138,7 +142,7 @@ public class MaterialManageService {
             );
         }
         // trường hợp còn lại
-        Page<MaterialProjection> materials = materialRepository.findMaterialsAllByStartDateAndEndDate(PageRequest.of(page - 1, pageSize), startDate, endDate.with(LocalTime.MAX),term);
+        Page<MaterialProjection> materials = materialRepository.findMaterialsAllByStartDateAndEndDate(PageRequest.of(page - 1, pageSize), startDate.with(LocalTime.MIN), endDate.with(LocalTime.MAX),term);
         return new PageDto(
                 materials.getNumber() + 1,
                 materials.getSize(),
@@ -175,5 +179,20 @@ public class MaterialManageService {
         List<MaterialProjection> materials = materialRepository.findMaterialRemainingQuantityLimit();
 
         return materials.subList(0,Math.min(materials.size(),10));
+    }
+
+    // danh sach cập nhật vaatk liệu
+    public PageDto findMaterialUpdate(Integer page, Integer pageSize) {
+
+        Page<UpdateMaterialInfo> updateMaterials = updateMaterialRepository.findMaterialUpdate(PageRequest.of(page -1, pageSize));
+
+
+        return new PageDto(
+                updateMaterials.getNumber() + 1,
+                updateMaterials.getSize(),
+                updateMaterials.getTotalPages(),
+                (int) Math.ceil(updateMaterials.getTotalElements()),
+                updateMaterials.getContent()
+        );
     }
 }

@@ -39,17 +39,22 @@ public class EmployeeManageController {
     }
     // cập nhật thông tin nhân viên theo id
     @PutMapping("employee/{id}")
-    public ResponseEntity<?> updateInformationEmployeeById(@RequestBody AdminUpdateInformationEmployeeRequest request, @PathVariable Integer id) {
+    public ResponseEntity<?> updateInformationEmployeeById(@Valid @RequestBody AdminUpdateInformationEmployeeRequest request, @PathVariable Integer id) {
         return ResponseEntity.ok(employeeManageService.updateInformationEmployeeById(request, id));
     }
     // cập nhật mật khẩu tài khoản nhân viên theo id
     @PutMapping("employee/password/{id}")
-    public ResponseEntity<?> updatePasswordAccEmployeeById(@RequestBody AdminUpdatePasswordRequest request, @PathVariable Integer id) {
+    public ResponseEntity<?> updatePasswordAccEmployeeById(@Valid @RequestBody AdminUpdatePasswordRequest request, @PathVariable Integer id) {
         return ResponseEntity.ok(employeeManageService.updatePasswordAccEmployeeById(request, id));
     }
     // xóa nhân viên đồng thời  khóa tài khoản nhân viên không sử dụng nữa
     @DeleteMapping("employee/{id}")
     public ResponseEntity<?> deleteEmployeeById (@PathVariable Integer id) {
         return ResponseEntity.ok(employeeManageService.deleteEmployeeById(id));
+    }
+
+    @PutMapping("enabled-employee/{id}")
+    public ResponseEntity<?> enabledEmployeeById(@PathVariable Integer id) {
+        return ResponseEntity.ok(employeeManageService.enabledEmployeeById(id));
     }
 }

@@ -2,6 +2,7 @@ package com.example.graduationprojectbe.controller.warehouseemployee;
 
 import com.example.graduationprojectbe.request.ApproveOrderMaterialRequest;
 import com.example.graduationprojectbe.service.warehouseemployee.ApproverOrderMaterialService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ public class ApproverOrderMaterialController {
     }
 
     @PutMapping("app-order/{id}")
-    public ResponseEntity<?> approveOrderMaterial (@RequestBody ApproveOrderMaterialRequest request, @PathVariable Integer id) {
+    public ResponseEntity<?> approveOrderMaterial (@Valid @RequestBody ApproveOrderMaterialRequest request, @PathVariable Integer id) {
         return ResponseEntity.ok(approverOrderMaterialService.approveOrderMaterial(request,id));
     }
 

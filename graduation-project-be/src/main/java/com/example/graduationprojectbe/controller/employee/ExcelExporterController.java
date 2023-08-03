@@ -183,4 +183,21 @@ public class ExcelExporterController {
         return new ResponseEntity<>(resource, headers, HttpStatus.OK);
     }
 
+
+    @GetMapping("export-material-update")
+    public ResponseEntity<?> exportMaterialUpdateToExcel() {
+
+        File excelFile = excelExporterService.exportMaterialUpdateToExcel();
+
+        // Thiết lập các header cho HTTP
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", excelFile.getName());
+
+        // Tạo đối tượng interface Resource từ file Excel
+        Resource resource = new FileSystemResource(excelFile);
+
+        return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+    }
+
 }

@@ -70,3 +70,10 @@ export const guaranteeCreateSchema = yup.object({
     .required("Mã sản phẩm không được để trống")
     .integer("Mã sản phẩm phải không được là chuỗi ký tự"),
 });
+
+
+export const updateReceiptSchema = yup.object({
+  payDate: yup
+    .date()
+    .required("Ngày hẹn trả không được để trống")
+});

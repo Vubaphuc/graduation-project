@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useLazyFindOrderMaterialsAllQuery, useTotalPriceAndQuantityMaterialQuery } from "../../../app/apis/admin/materialManageApi";
+import { useLazyFindMaterialUpdateQuery, useLazyFindOrderMaterialsAllQuery, useTotalPriceAndQuantityMaterialQuery } from "../../../app/apis/admin/materialManageApi";
 import moment from "moment";
 import { Link } from "react-router-dom";
 
@@ -12,6 +12,7 @@ function MaterialPage() {
 
     const [getMaterial, { data: orderMaterialData, isLoading: orderMaterialLoading }] = useLazyFindOrderMaterialsAllQuery();
     const { data: totalData } = useTotalPriceAndQuantityMaterialQuery();
+    const [getUpdateMaterial, { data: updateData }] = useLazyFindMaterialUpdateQuery();
 
     useEffect(() => {
         const formattedStartDate = startDate ? moment(startDate).format("YYYY-MM-DDTHH:mm:ss") : "";
@@ -22,6 +23,13 @@ function MaterialPage() {
             startDate: formattedStartDate,
             endDate: formattedEndDate,
         });
+    }, [])
+
+    useEffect(() => {
+        getUpdateMaterial({
+            page: 1,
+            pageSize: 5
+        })
     }, [])
 
     if (orderMaterialLoading) {
@@ -55,6 +63,11 @@ function MaterialPage() {
             startDate: formattedStartDate,
             endDate: formattedEndDate,
         });
+    }
+
+    const exportMaterialUpdateToExcel = () => {
+        const url = "http://localhost:8080/excel/api/v1/export-material-update";
+        window.location.href = url;
     }
 
 
@@ -166,7 +179,6 @@ function MaterialPage() {
                                         <th scope="col">Loại Linh Kiện</th>
                                         <th scope="col">Số Lượng Order</th>
                                         <th scope="col">Tình Trạng</th>
-                                        <th scope="col">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -177,8 +189,7 @@ function MaterialPage() {
                                             <td>{order.material.code}</td>
                                             <td>{order.material.components.name}</td>
                                             <td>{order.quantity}</td>
-                                            <td>{order.status ? "Approved" : "Pending"}</td>
-                                            <td><Link to={`/admin/product/${order.id}`} className="btn btn-primary">Detail</Link></td>
+                                            <td>{order.status ? "Approved" : "Pending"}</td>                               
                                         </tr>
                                     ))}
                                 </tbody>
@@ -194,6 +205,71 @@ function MaterialPage() {
                                     pageRangeDisplayed={3}
                                     marginPagesDisplayed={2}
                                     pageCount={orderMaterialData?.totalPages}
+                                    previousLabel="< previous"
+                                    pageClassName="page-item"
+                                    pageLinkClassName="page-link"
+                                    previousClassName="page-item"
+                                    previousLinkClassName="page-link"
+                                    nextClassName="page-item"
+                                    nextLinkClassName="page-link"
+                                    breakLabel="..."
+                                    breakClassName="page-item"
+                                    breakLinkClassName="page-link"
+                                    containerClassName="pagination"
+                                    activeClassName="active"
+                                    renderOnZeroPageCount={null}
+                                />
+                            </div>
+                        </div>
+                    ) : (
+                        <p>Không có Thông tin nào!!!</p>
+                    )}
+                </div>
+            </div>
+
+            <div className="pt-4 px-4">
+                <div className="text-center rounded p-4 table-table">                 
+                    <div className="d-flex align-items-center justify-content-between mb-4">
+                        <h6 className="mb-0">Danh Sách Vật Liệu update</h6>
+                        <div>
+                            <button className="btn btn-warning px-4" variant="warning" onClick={exportMaterialUpdateToExcel}>Export</button>
+                        </div>
+                    </div>
+                    {updateData && updateData.data.length > 0 ? (
+                        <div className="table-responsive">
+                            <table className="table text-start align-middle table-bordered table-hover mb-0">
+                                <thead>
+                                    <tr className="text-white">
+                                        <th scope="col">Ngày Update</th>
+                                        <th scope="col">Mã Vật Liệu</th>
+                                        <th scope="col">Số Lượng update</th>
+                                        <th scope="col">Mã Nhân Viên Update</th>
+                                        <th scope="col">Tên Nhân Viên Update</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {updateData.data.map((material, index) => (
+                                        <tr key={index}>
+                                            <td>{new Date(material.updateDate).toLocaleDateString()}</td>
+                                            <td>{material.material.code}</td>
+                                            <td>{material.quantity}</td>
+                                            <td>{material.employeeUpdate.employeeCode}</td>  
+                                            <td>{material.employeeUpdate.employeeName}</td>                        
+                                        </tr>
+                                    ))}
+                                </tbody>
+
+                            </table>
+                            <div
+                                className="d-flex justify-content-center mt-3"
+                                id="pagination"
+                            >
+                                <ReactPaginate
+                                    nextLabel="next >"
+                                    onPageChange={handlePageClick}
+                                    pageRangeDisplayed={3}
+                                    marginPagesDisplayed={2}
+                                    pageCount={updateData?.totalPages}
                                     previousLabel="< previous"
                                     pageClassName="page-item"
                                     pageLinkClassName="page-link"

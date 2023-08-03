@@ -17,6 +17,10 @@ export const employeeApi = createApi ({
     }),
     tagTypes: ['Employee'],
     endpoints: (builder) => ({     
+        findEmployeeById: builder.query ({
+            query: (id) => `employee/${id}`,
+            providesTags:  ['Employee']
+        }),
         findEngineerAll: builder.query ({
             query: () => "engineer",
             providesTags: ['Employee'],
@@ -68,15 +72,20 @@ export const employeeApi = createApi ({
                 body: data,
             }),
             invalidatesTags: ['Account'],
-        }),
-        exportBillToPdf: builder.query ({
-            query: (id) => `bill-pdf/${id}`,
+        }),   
+        searchHistoryProduct: builder.query ({
+            query: ({page, pageSize, startDate, endDate,term}) => `search?page=${page}&pageSize=${pageSize}&startDate=${startDate}&endDate=${endDate}&term=${term}`,
             providesTags: ['Account'],
-        }),     
+        }),
+        getAllUsers: builder.query ({
+            query: () => "users",
+            providesTags: ['Employee']
+        })
     }),
 });;
 
 export const { 
+    useFindEmployeeByIdQuery,
     useFindEngineerAllQuery,
     useFindReceptionistAllQuery,
     useFindWarehouseEmployeeAllQuery,
@@ -86,5 +95,6 @@ export const {
     useUpdatePersonalInformationMutation,
     useForgotPasswordMutation,
     useGetAvatarQuery,
-    useLazyExportBillToPdfQuery
+    useLazySearchHistoryProductQuery,
+    useGetAllUsersQuery,
 } = employeeApi;

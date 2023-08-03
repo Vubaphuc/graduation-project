@@ -1,6 +1,7 @@
 import React from "react";
 import hookFetchQuery from "../page/hookForm/hook/hookAccount/hookFetchQuery";
 import { Link } from "react-router-dom";
+import { Button } from "antd";
 
 function Sidebar() {
     const { auth } = hookFetchQuery();
@@ -16,19 +17,19 @@ function Sidebar() {
                 <nav className="navbar navbar-dark">
                     <div className="logo d-flex justify-content-center align-items-center">
                         {isShowMenu(roles, ["ADMIN"]) && (
-                            <h4 className="fs-4 text-white" >ADMIN</h4>
+                            <Link to={"/admin"} className="fs-4 text-white text-decoration-none" >ADMIN</Link>
                         )}
                         {isShowMenu(roles, ["NHANVIENLETAN"]) && (
-                            <h4 className="fs-4 text-white">Nhân Viên Lễ Tân</h4>
+                            <Link to={"/receptionist"} className="fs-4 text-white text-decoration-none">Nhân Viên Lễ Tân</Link>
                         )}
                         {isShowMenu(roles, ["NHANVIENSUACHUA"]) && (
-                            <h4 className="fs-4 text-white">Nhân viên sửa chữa</h4>
+                            <Link to={"/engineer"} className="fs-4 text-white text-decoration-none">Nhân viên sửa chữa</Link>
                         )}
                         {isShowMenu(roles, ["NHANVIENKHO"]) && (
-                            <h4 className="fs-4 text-white">Nhân viên Kho</h4>
+                            <Link to={"/warehouse"} className="fs-4 text-white text-decoration-none">Nhân viên Kho</Link>
                         )}
                         {isShowMenu(roles, ["NHANVIENBAOHANH"]) && (
-                            <h4 className="fs-4 text-white">Nhân viên Bảo Hành</h4>
+                            <Link to={"/warranty"} className="fs-4 text-white text-decoration-none">Nhân viên Bảo Hành</Link>
                         )}
                     </div>
                     {isShowMenu(roles, ["NHANVIENLETAN"]) && (
@@ -55,8 +56,13 @@ function Sidebar() {
                                 </div>
                             </div>
                             <div className="nav-item dropdown">
-                                <Link to={"/receptionist/search"} className="dropdown-item search"><i className="fa fa-tachometer-alt me-2"></i>Tìm Kiếm</Link>
+                                <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i className="fa fa-th me-2"></i>Quản Lý Biên Lai</a>
+                                <div className="dropdown-menu bg-transparent border-0">
+                                    <Link to={"/receptionist/receipts"} className="dropdown-item">Danh Sách Biên Lai</Link>
+                                    <Link to={"/receptionist/no-receipts"} className="dropdown-item">List Product No Create Receipt</Link>
+                                </div>
                             </div>
+                            <Link to={"/employee/search"} className="nav-item nav-link active ms-3"><i className="fa-solid fa-magnifying-glass me-2"></i>Search</Link>
                             <div className="nav-item dropdown">
                                 <a
                                     href="#"
@@ -71,6 +77,7 @@ function Sidebar() {
                                     <Link to={"/employee/change-password"} className="dropdown-item">Đổi Mật khẩu</Link>
                                 </div>
                             </div>
+                            <Link to={"/chat"} className="nav-item nav-link text-primary ms-3" ><i className="fa fa-chart-bar me-2"></i>CHAT</Link>
                         </div>
                     )}
                     {isShowMenu(roles, ["NHANVIENSUACHUA"]) && (
@@ -93,6 +100,7 @@ function Sidebar() {
                                     <Link to={"/engineer/materials"} className="dropdown-item">Danh sách Vật Liệu</Link>
                                 </div>
                             </div>
+                            <Link to={"/employee/search"} className="nav-item nav-link active ms-3"><i className="fa-solid fa-magnifying-glass me-2"></i>Search</Link>
                             <div className="nav-item dropdown">
                                 <a
                                     href="#"
@@ -107,6 +115,7 @@ function Sidebar() {
                                     <Link to={"/employee/change-password"} className="dropdown-item">Đổi Mật khẩu</Link>
                                 </div>
                             </div>
+                            <Link to={"/chat"} className="nav-item nav-link text-primary ms-3" ><i className="fa fa-chart-bar me-2"></i>CHAT</Link>
                         </div>
                     )}
                     {isShowMenu(roles, ["NHANVIENKHO"]) && (
@@ -140,6 +149,7 @@ function Sidebar() {
                                     <Link to={"/warehouse/vendor/create"} className="dropdown-item">Thêm Vender Mới</Link>
                                 </div>
                             </div>
+                            <Link to={"/employee/search"} className="nav-item nav-link active ms-3"><i className="fa-solid fa-magnifying-glass me-2"></i>Search</Link>
                             <div className="nav-item dropdown">
                                 <a
                                     href="#"
@@ -154,18 +164,39 @@ function Sidebar() {
                                     <Link to={"/employee/change-password"} className="dropdown-item">Đổi Mật khẩu</Link>
                                 </div>
                             </div>
+                            <Link to={"/chat"} className="nav-item nav-link text-primary ms-3" ><i className="fa fa-chart-bar me-2"></i>CHAT</Link>
                         </div>
                     )}
                     {isShowMenu(roles, ["NHANVIENBAOHANH"]) && (
                         <div className="navbar-nav w-100">
                             <div className="nav-item dropdown">
+                                <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i className="fa fa-th me-2"></i>Quản lý Khách hàng</a>
+                                <div className="dropdown-menu bg-transparent border-0">
+                                    <Link to={"/warranty/customers"} className="dropdown-item">Danh sách khách hàng</Link>
+                                </div>
+                            </div>
+                            <div className="nav-item dropdown">
                                 <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i className="fa fa-th me-2"></i>Quản lý Sản Phẩm</a>
                                 <div className="dropdown-menu bg-transparent border-0">
                                     <Link to={"/warranty/product-delivered"} className="dropdown-item">Danh sách Product Delivered</Link>
-                                    <Link to={"/warranty/product-guarantee"} className="dropdown-item">Product Waiting For Repair</Link>
                                     <Link to={"/warranty/product-guarantee-repaired"} className="dropdown-item">Danh sách Product Repaired</Link>
                                 </div>
                             </div>
+                            <div className="nav-item dropdown">
+                                <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i className="fa fa-th me-2"></i>Transfer Delivery Product</a>
+                                <div className="dropdown-menu bg-transparent border-0">
+                                    <Link to={"/warranty/product-guarantee"} className="dropdown-item">Danh Sách Waiting For Repair</Link>
+                                    <Link to={"/warranty/under-repair"} className="dropdown-item">Danh sách Under Repair</Link>
+                                </div>
+                            </div>
+                            <div className="nav-item dropdown">
+                                <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i className="fa fa-th me-2"></i>Quản Lý Biên Lai</a>
+                                <div className="dropdown-menu bg-transparent border-0">
+                                    <Link to={"/warranty/receipts"} className="dropdown-item">Danh Sách Biên Lai</Link>
+                                    <Link to={"/warranty/no-receipts"} className="dropdown-item">List Product No Create Receipt</Link>
+                                </div>
+                            </div>
+                            <Link to={"/employee/search"} className="nav-item nav-link active ms-3"><i className="fa-solid fa-magnifying-glass me-2"></i>Search</Link>
                             <div className="nav-item dropdown">
                                 <a
                                     href="#"
@@ -180,6 +211,7 @@ function Sidebar() {
                                     <Link to={"/employee/change-password"} className="dropdown-item">Đổi Mật khẩu</Link>
                                 </div>
                             </div>
+                            <Link to={"/chat"} className="nav-item nav-link text-primary ms-3" ><i className="fa fa-chart-bar me-2"></i>CHAT</Link>
                         </div>
                     )}
                     {isShowMenu(roles, ["ADMIN"]) && (
@@ -189,7 +221,7 @@ function Sidebar() {
                             <Link to={"/admin/product-guarantee-manage"} className="nav-item nav-link color-while ms-3" ><i className="fa fa-chart-bar me-2"></i>Product Guarantee</Link>
                             <Link to={"/admin/material-manage"} className="nav-item nav-link material" ><i className="fa fa-chart-bar me-2"></i>Material</Link>
                             <Link to={"/admin/materials"} className="nav-item nav-link text-primary ms-3" ><i className="fa fa-chart-bar me-2"></i>Material Detail</Link>
-                      
+
                             <div className="nav-item dropdown">
                                 <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i className="fa fa-keyboard me-2"></i>Nhân Viên</a>
                                 <div className="dropdown-menu bg-transparent border-0">
@@ -211,6 +243,7 @@ function Sidebar() {
                                     <Link to={"/employee/change-password"} className="dropdown-item">Đổi Mật khẩu</Link>
                                 </div>
                             </div>
+                            <Link to={"/chat"} className="nav-item nav-link text-primary ms-3" ><i className="fa fa-chart-bar me-2"></i>CHAT</Link>
                         </div>
                     )}
                 </nav>

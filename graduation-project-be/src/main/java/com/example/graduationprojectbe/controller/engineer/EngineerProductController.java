@@ -2,6 +2,7 @@ package com.example.graduationprojectbe.controller.engineer;
 
 import com.example.graduationprojectbe.request.InformationRepairRequest;
 import com.example.graduationprojectbe.service.engineer.EngineerProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class EngineerProductController {
 
     // cập nhật thông tin sửa chữa
     @PutMapping("update-product/{id}")
-    public ResponseEntity<?> updateInformationProductNewById(@RequestBody InformationRepairRequest request, @PathVariable Integer id) {
+    public ResponseEntity<?> updateInformationProductNewById(@Valid @RequestBody InformationRepairRequest request, @PathVariable Integer id) {
         return ResponseEntity.ok(engineerProductService.updateInformationProductNewById(request, id));
     }
 
@@ -52,7 +53,7 @@ public class EngineerProductController {
 
     // cập nhật thông tin sửa chữa sản phẩm bảo hành
     @PutMapping("update-product-guarantee/{id}")
-    public ResponseEntity<?> updateInformationProductGuaranteeById(@RequestBody InformationRepairRequest request, @PathVariable Integer id) {
+    public ResponseEntity<?> updateInformationProductGuaranteeById(@Valid @RequestBody InformationRepairRequest request, @PathVariable Integer id) {
         return ResponseEntity.ok(engineerProductService.updateInformationProductGuaranteeById(request, id));
     }
 

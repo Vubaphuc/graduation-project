@@ -145,4 +145,19 @@ public class EmployeeManageService {
                 "Delete Employee success",
                 DataMapper.toDataResponse(user.getId(), user.getEmployeeName()));
     }
+
+    public StatusResponse enabledEmployeeById(Integer id) {
+
+        // lấy ra user theo id
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Not Found With id" + id));
+        // cập nhật lại trạng thái login
+        user.setEnabled(true);
+        // lưu lại
+        userRepository.save(user);
+
+        return new StatusResponse(HttpStatus.OK,
+                "Enabled Employee success",
+                DataMapper.toDataResponse(user.getId(), user.getEmployeeName()));
+    }
 }

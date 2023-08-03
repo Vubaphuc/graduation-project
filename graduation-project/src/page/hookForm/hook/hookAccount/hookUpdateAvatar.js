@@ -36,7 +36,9 @@ const hookUpdateAvatar = () => {
                     },
                 }
             );
-
+            setFiles(null);
+            const avatarImg = document.getElementById("avatar-img");
+            avatarImg.src = "https://haycafe.vn/wp-content/uploads/2022/02/Avatar-trang-den.png";
             navigate("/employee/personal-information")
 
         } catch (error) {

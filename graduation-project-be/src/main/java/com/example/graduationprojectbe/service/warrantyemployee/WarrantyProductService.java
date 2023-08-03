@@ -2,9 +2,9 @@ package com.example.graduationprojectbe.service.warrantyemployee;
 
 import com.example.graduationprojectbe.config.GenerateCode;
 import com.example.graduationprojectbe.constants.Status;
+import com.example.graduationprojectbe.dto.dto.CustomerDto;
 import com.example.graduationprojectbe.dto.page.PageDto;
-import com.example.graduationprojectbe.dto.projection.ProductGuaranteeProjection;
-import com.example.graduationprojectbe.dto.projection.ProductProjection;
+import com.example.graduationprojectbe.dto.projection.*;
 import com.example.graduationprojectbe.entity.*;
 import com.example.graduationprojectbe.exception.BadRequestException;
 import com.example.graduationprojectbe.exception.NotFoundException;
@@ -13,14 +13,19 @@ import com.example.graduationprojectbe.repository.*;
 import com.example.graduationprojectbe.request.CreateBillAndGuaranteeRequest;
 import com.example.graduationprojectbe.request.InformationEngineerRequest;
 import com.example.graduationprojectbe.request.RegisterProductGuaranteeRequest;
+import com.example.graduationprojectbe.request.UpdateReceiptRequest;
 import com.example.graduationprojectbe.response.StatusResponse;
 import com.example.graduationprojectbe.sercurity.ICurrentUserLmpl;
+import com.example.graduationprojectbe.service.auth.EmailService;
+import com.example.graduationprojectbe.service.auth.PDFService;
+import com.itextpdf.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -40,6 +45,15 @@ public class WarrantyProductService {
     private GuaranteeRepository guaranteeRepository;
     @Autowired
     private GenerateCode generateCode;
+    @Autowired
+    private CustomerRepository customerRepository;
+    @Autowired
+    private ReceiptGuaranteeRepository receiptGuaranteeRepository;
+    @Autowired
+    private EmailService emailService;
+    @Autowired
+    private PDFService pdfService;
+
 
 
     // lấy danh sách sản phẩm new đã trả khàng
@@ -203,6 +217,8 @@ public class WarrantyProductService {
     // tạo hóa đơn cho sản phẩm bảo hành
     public StatusResponse createBill(CreateBillAndGuaranteeRequest request) {
 
+        ReceiptGuarantee receiptGuarantee = receiptGuaranteeRepository.findByProductGuarantee_Id(request.getProductId()).orElseThrow(() -> new NotFoundException("Not Found With ID: " + request.getProductId()));
+
         // lấy ra sản phẩm theo id
         ProductGuarantee productGuarantee = productGuaranteeRepository.findById(request.getProductId()).orElseThrow(() -> new NotFoundException("Not Found with id : " + request.getProductId()));
 
@@ -223,6 +239,9 @@ public class WarrantyProductService {
         // lưu vào csdl
         billGuaranteeRepository.save(billGuarantee);
 
+        receiptGuarantee.setStatus(false);
+        receiptGuaranteeRepository.save(receiptGuarantee);
+
         return new StatusResponse(HttpStatus.CREATED,
                 "registered guarantee successfully",
                 DataMapper.toDataResponse(billGuarantee.getId(), billGuarantee.getProductGuarantee().getNameModel()));
@@ -242,4 +261,120 @@ public class WarrantyProductService {
                 productGuarantees.getContent()
         );
     }
+
+    public PageDto findProductGuaranteeUnderRepairAll(int page, int pageSize, String term) {
+
+        Page<ProductGuaranteeProjection> productGuarantees = productGuaranteeRepository.findProductUnderRepairAll(PageRequest.of(page - 1, pageSize), term, Status.UNDER_REPAIR);
+
+        return new PageDto(
+                productGuarantees.getNumber() + 1,
+                productGuarantees.getSize(),
+                productGuarantees.getTotalPages(),
+                (int) Math.ceil(productGuarantees.getTotalElements()),
+                productGuarantees.getContent()
+        );
+    }
+
+    // danh sách khách hàng có tổng số sản phẩm
+    public PageDto findProductByCustomers(int page, int pageSize, String term) {
+
+        Page<CustomerProjection> products = customerRepository.findProductByCustomers(PageRequest.of(page - 1, pageSize), term);
+
+        return new PageDto(
+                products.getNumber() + 1,
+                products.getSize(),
+                products.getTotalPages(),
+                (int) Math.ceil(products.getTotalElements()),
+                products.getContent()
+        );
+    }
+
+
+
+
+
+    // tạo biên lai thu nhận sản phẩm
+    public StatusResponse createReceipt(Integer id) throws DocumentException, IOException {
+
+        if (receiptGuaranteeRepository.findByProductGuarantee_Id(id).isPresent()) {
+            throw new BadRequestException("generated receipt");
+        }
+
+        ProductGuarantee productGuarantee = productGuaranteeRepository.findById(id).orElseThrow(() -> new NotFoundException("Not Found With ID: " + id));
+
+        ReceiptGuarantee receiptGuarantee = ReceiptGuarantee.builder()
+                .createDate(LocalDateTime.now())
+                .quantity(1)
+                .status(true)
+                .employeeCreate(iCurrentUserLmpl.getUser())
+                .productGuarantee(productGuarantee)
+                .build();
+
+        receiptGuaranteeRepository.save(receiptGuarantee);
+
+        emailService.sendPDFMail(receiptGuarantee.getProductGuarantee().getCustomer().getEmail(),
+                "Biên Lai Thu Nhận Sản phẩm", "Gửi Khách Hàng Chi tiết thông tin biên lai",
+                pdfService.convertReceiptGuaranteeToPdf(receiptGuarantee));
+
+
+        return new StatusResponse(HttpStatus.CREATED, "Create Receipt success", DataMapper.toDataResponse(receiptGuarantee.getId(), receiptGuarantee.getProductGuarantee().getNameModel()));
+    }
+
+    public PageDto findReceiptAll(int page, int pageSize, String term) {
+
+        Page<ReceiptGuaranteeInfo> receiptGuarantees = receiptGuaranteeRepository.findReceiptAll(PageRequest.of(page - 1, pageSize), term);
+
+        return new PageDto(
+                receiptGuarantees.getNumber() + 1,
+                receiptGuarantees.getSize(),
+                receiptGuarantees.getTotalPages(),
+                (int) Math.ceil(receiptGuarantees.getTotalElements()),
+                receiptGuarantees.getContent()
+        );
+    }
+
+    public PageDto findReceiptStatusTrueAll(int page, int pageSize, String term) {
+
+        Page<ReceiptGuaranteeInfo> receiptGuarantees = receiptGuaranteeRepository.findReceiptStatusTrueAll(PageRequest.of(page - 1, pageSize), term);
+
+        return new PageDto(
+                receiptGuarantees.getNumber() + 1,
+                receiptGuarantees.getSize(),
+                receiptGuarantees.getTotalPages(),
+                (int) Math.ceil(receiptGuarantees.getTotalElements()),
+                receiptGuarantees.getContent()
+        );
+    }
+
+    public PageDto findProductNoCreateReceiptAll(int page, int pageSize, String term) {
+
+        Page<ProductGuaranteeProjection> productsGuarantee = productGuaranteeRepository.findProductNoCreateReceiptAll(PageRequest.of(page - 1, pageSize), term);
+
+        return new PageDto(
+                productsGuarantee.getNumber() + 1,
+                productsGuarantee.getSize(),
+                productsGuarantee.getTotalPages(),
+                (int) Math.ceil(productsGuarantee.getTotalElements()),
+                productsGuarantee.getContent()
+        );
+    }
+
+    public ReceiptGuaranteeInfo findReceiptById(Integer id) {
+        return receiptGuaranteeRepository.findReceiptById(id).orElseThrow(() -> new NotFoundException("Not Found With ID: " + id));
+    }
+
+    public StatusResponse updateReceiptById(UpdateReceiptRequest request, Integer id) {
+        ReceiptGuarantee receiptGuarantee =  receiptGuaranteeRepository.findById(id).orElseThrow(() -> new NotFoundException("Not Found With ID: " + id));
+
+        if (!receiptGuarantee.isStatus()) {
+            throw new BadRequestException("Updates are not allowed");
+        }
+
+        receiptGuarantee.setPayDate(request.getPayDate());
+        receiptGuaranteeRepository.save(receiptGuarantee);
+
+        return new StatusResponse(HttpStatus.OK, "Update Receipt success", DataMapper.toDataResponse(receiptGuarantee.getId(), receiptGuarantee.getProductGuarantee().getNameModel()));
+    }
+
+
 }

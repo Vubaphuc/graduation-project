@@ -73,6 +73,44 @@ export const warrantyProductApi = createApi({
             query: ({page, pageSize, term}) => `product-guarantee-return?page=${page}&pageSize=${pageSize}&term=${term}`,
             providesTags: ['Warranty'],
         }),
+        findProductGuaranteeUnderRepairAll: builder.query ({
+            query: ({page, pageSize, term}) => `product-guarantee-under-repair?page=${page}&pageSize=${pageSize}&term=${term}`,
+        }),
+        findProductByCustomers: builder.query ({
+            query: ({page, pageSize, term}) => `customers?page=${page}&pageSize=${pageSize}&term=${term}`,
+            providesTags: ['Warranty'],
+        }),
+        createReceipt: builder.mutation ({
+            query: (id) => ({
+                url: `receipt/${id}`,
+                method: "POST",
+            }),
+            invalidatesTags: ['Warranty'],
+        }),
+        findReceiptAll: builder.query ({
+            query: ({page, pageSize, term}) => `receipts?page=${page}&pageSize=${pageSize}&term=${term}`,
+            providesTags: ['Warranty'],
+        }),
+        findReceiptStatusTrueAll: builder.query ({
+            query: ({page, pageSize, term}) => `receipts-no?page=${page}&pageSize=${pageSize}&term=${term}`,
+            providesTags: ['Warranty'],
+        }),
+        findReceiptById: builder.query ({
+            query: (id) => `receipt/${id}`,
+            providesTags: ['Warranty'],
+        }),
+        updateReceiptById: builder.mutation({
+            query: ({id,...data}) => ({
+                url: `receipt/${id}`,
+                method: "PUT",
+                body: data
+            }),
+            invalidatesTags: ['Warranty'],
+        }),
+        findProductNoCreateReceiptAll: builder.query ({
+            query: ({page, pageSize, term}) => `no-create-receipts?page=${page}&pageSize=${pageSize}&term=${term}`,
+            providesTags: ['Warranty'],
+        }),
     }),
 });
 
@@ -87,4 +125,12 @@ export const {
     useCreateBillMutation,
     useCreateNewGuaranteeMutation,
     useLazyFindProductGuaranteeWaitingForReturnAllQuery,
+    useLazyFindProductGuaranteeUnderRepairAllQuery,
+    useLazyFindProductByCustomersQuery,
+    useCreateReceiptMutation,
+    useLazyFindReceiptAllQuery,
+    useLazyFindReceiptStatusTrueAllQuery,
+    useFindReceiptByIdQuery,
+    useUpdateReceiptByIdMutation,
+    useLazyFindProductNoCreateReceiptAllQuery
 } = warrantyProductApi;

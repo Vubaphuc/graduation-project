@@ -3,10 +3,13 @@ import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
 import { useLazyFindProductGuaranteeByUserAllQuery, useLazyGetListProductNewByUserQuery } from "../../../app/apis/engineer/engineerProductApi";
 import { getRepairLabel, getStatusLabel } from "../../formHTML/enum";
+import hookRecepProductCreate from "../../hookForm/hook/hookReceptionist/hookRecepProductCreate";
 
 function EngineerPage() {
     const [term, setTerm] = useState("");
-    const [status, setStatus] = useState("NEW")
+    const [status, setStatus] = useState("NEW");
+
+    const { check, setCheck } = hookRecepProductCreate();
 
     const [getProduct, { data: productData, isLoading: productLoading }] =
         useLazyGetListProductNewByUserQuery();
@@ -19,8 +22,20 @@ function EngineerPage() {
             page: 1,
             pageSize: 10,
             term: term
-        })
-    }, [term])
+        });
+        const interval = setInterval(() => {
+            getProduct({
+                page: 1,
+                pageSize: 10,
+                term: term
+            });
+        }, 5000); // Gửi yêu cầu cập nhật mỗi 5 giây
+        return () => {
+            clearInterval(interval);
+        };
+    }, [term]);
+
+    console.log(check)
 
     useEffect(() => {
         getProductGuarantee({

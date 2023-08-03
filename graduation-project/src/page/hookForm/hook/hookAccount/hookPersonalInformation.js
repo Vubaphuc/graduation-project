@@ -6,10 +6,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { updatePersonalInformationSchema } from "../../schemas/accountSchemas";
 import { toast } from "react-toastify";
 import { useUpdatePersonalInformationMutation } from "../../../../app/apis/employee/employeeApi";
+import { updateUser } from "../../../../app/slice/authSlice";
 
 
 const hookPersonalInformation = () => {
-
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { token } = hookFetchQuery();
@@ -25,17 +25,17 @@ const hookPersonalInformation = () => {
         personalInformation(data)
         .unwrap()
         .then((res) => {
+            console.log(data)
             const newAuth = {
                 auth: res,
                 token: token,
                 isAuthenticated: true,
             }
             dispatch(updateUser(newAuth));
-            window.location.reload()
             toast.success("Cập Nhật Thông Tin Thành Công");
         })
         .catch((err) => {
-            toast.error(err.data.message);
+            toast.error(err);
         })
     }
 

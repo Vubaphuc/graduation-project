@@ -3,6 +3,7 @@ package com.example.graduationprojectbe.controller.engineer;
 import com.example.graduationprojectbe.request.CreateOrderMaterialRequest;
 import com.example.graduationprojectbe.request.UpdateOrderMaterialRequest;
 import com.example.graduationprojectbe.service.engineer.EngineerOrderMaterialService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class EngineerOrderMaterialController {
 
     // tạo order
     @PostMapping("order")
-    public ResponseEntity<?> CreateOrderMaterial (@RequestBody CreateOrderMaterialRequest request) {
+    public ResponseEntity<?> CreateOrderMaterial (@Valid @RequestBody CreateOrderMaterialRequest request) {
         return ResponseEntity.ok(engineerOrderMaterialService.CreateOrderMaterial(request));
     }
 
@@ -52,7 +53,7 @@ public class EngineerOrderMaterialController {
 
     // cập nhật số lượng order vật liệu
     @PutMapping("order/{id}")
-    public ResponseEntity<?> updateQuantityOrderMaterialById(@RequestBody UpdateOrderMaterialRequest request , @PathVariable Integer id) {
+    public ResponseEntity<?> updateQuantityOrderMaterialById(@Valid @RequestBody UpdateOrderMaterialRequest request , @PathVariable Integer id) {
         return ResponseEntity.ok(engineerOrderMaterialService.updateQuantityOrderMaterialById(request, id));
     }
 

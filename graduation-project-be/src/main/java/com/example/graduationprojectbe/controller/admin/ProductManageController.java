@@ -48,14 +48,20 @@ public class ProductManageController {
         return ResponseEntity.ok(productManageService.findProductPendingAll(page,pageSize));
     }
 
+    @GetMapping("products-for-return")
+    public ResponseEntity<?> findProductWaitingForReturnAll(@RequestParam(defaultValue = "1") Integer page,
+                                                            @RequestParam(defaultValue = "5") Integer pageSize) {
+        return ResponseEntity.ok(productManageService.findProductWaitingForReturnAll(page,pageSize));
+    }
+
 
     // danh sách sản phẩm theo chờ sửa chữa
     @GetMapping("product-for-reapir")
-    public ResponseEntity<?> findProductWaitingForRepairAll(@RequestParam(defaultValue = "1") Integer page,
+    public ResponseEntity<?> findProductsWaitingForRepairAll(@RequestParam(defaultValue = "1") Integer page,
                                                             @RequestParam(defaultValue = "5") Integer pageSize,
                                                             @RequestParam(required = false) LocalDateTime startDate,
                                                             @RequestParam(required = false) LocalDateTime endDate) {
-        return ResponseEntity.ok(productManageService.findProductWaitingForRepairAll(page,pageSize,startDate,endDate));
+        return ResponseEntity.ok(productManageService.findProductsWaitingForRepairAll(page,pageSize,startDate,endDate));
     }
 
     // danh sách sản phẩm đang sửa chữa

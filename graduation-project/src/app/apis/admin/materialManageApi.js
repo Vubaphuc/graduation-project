@@ -40,7 +40,11 @@ export const materialManageApi = createApi ({
         findMaterialRemainingQuantityLimit: builder.query ({
             query: () => "materials-remaining-quantity",
             providesTags: ['Materials']
-        })
+        }),
+        findMaterialUpdate: builder.query({
+            query: ({page,pageSize}) => `materials-update?page=${page}&pageSize=${pageSize}`,
+            providesTags: ['Materials'],
+        }),
         
     }),
 });;
@@ -52,4 +56,5 @@ export const {
     useLazyFindListTotalQuantityExportMaterialByMaterialCodeQuery,
     useLazyFindOrderMaterialLimitQuery,
     useFindMaterialRemainingQuantityLimitQuery,
+    useLazyFindMaterialUpdateQuery,
 } = materialManageApi;

@@ -5,36 +5,53 @@ import { getAddress } from "../formHTML/options";
 import addressQuery from "../formHTML/address";
 import hookPersonalInformation from "../hookForm/hook/hookAccount/hookPersonalInformation";
 import hookUpdateAvatar from "../hookForm/hook/hookAccount/hookUpdateAvatar";
+import { useFindEmployeeByIdQuery } from "../../app/apis/employee/employeeApi";
+import { useSelector } from "react-redux";
 import hookFetchQuery from "../hookForm/hook/hookAccount/hookFetchQuery";
 
 function PersonalInformation() {
+
+
     const { auth, avatarUrl } = hookFetchQuery();
 
     const { setFiles, handleChangeAvatar } = hookUpdateAvatar();
 
-    const { control,register, handleSubmit, errors, onPersonalInformation } = hookPersonalInformation();
+    const { control, register, handleSubmit, errors, onPersonalInformation } = hookPersonalInformation();
 
     const { provinces } = addressQuery();
 
+    const { data: userData, isLoading: userLoading } = useFindEmployeeByIdQuery(auth.id);
+
+    if (userLoading) {
+        return <h2>Loading....</h2>
+    }
+
+
+    
     // chọn và hiển thị hình ảnh lên
     const handleReaderAvatar = (e) => {
         const file = e.target.files[0];
         setFiles(file);
         const reader = new FileReader();
         reader.onload = () => {
-          const avatarImg = document.getElementById("avatar-img");
-          avatarImg.src = reader.result;
+            const avatarImg = document.getElementById("avatar-img");
+            avatarImg.src = reader.result;
         };
         reader.readAsDataURL(file);
-      };
+    };
 
 
     const addressOptions = getAddress(provinces);
 
     const defaultAddress = {
-        label: auth.address,
-        value: auth.address,
-      };
+        label: userData.address,
+        value: userData.address,
+    };
+
+    const handleClose = () => {
+        const avatarImg = document.getElementById("avatar-img");
+        avatarImg.src = "https://haycafe.vn/wp-content/uploads/2022/02/Avatar-trang-den.png";
+    }
 
     return (
         <>
@@ -51,7 +68,7 @@ function PersonalInformation() {
                                         disabled
                                         id="maNhanVien"
                                         className="form-control"
-                                        defaultValue={auth.employeeCode}
+                                        defaultValue={userData.employeeCode}
                                     />
                                 </div>
                                 <div className="mb-3">
@@ -60,7 +77,7 @@ function PersonalInformation() {
                                         type="text"
                                         id="fullname"
                                         className="form-control"
-                                        defaultValue={auth.employeeName}
+                                        defaultValue={userData.employeeName}
                                         {...register("fullName")}
                                     />
                                 </div>
@@ -70,7 +87,7 @@ function PersonalInformation() {
                                         type="text"
                                         id="email"
                                         className="form-control"
-                                        defaultValue={auth.email}
+                                        defaultValue={userData.email}
                                         disabled
                                     />
                                 </div>
@@ -80,7 +97,7 @@ function PersonalInformation() {
                                         type="text"
                                         id="phone"
                                         className="form-control"
-                                        defaultValue={auth.phone}
+                                        defaultValue={userData.phone}
                                         {...register("phone")}
                                     />
                                 </div>
@@ -161,7 +178,7 @@ function PersonalInformation() {
                             </div>
 
                             <div className="modal-body">
-                                <div className="avatar-preview mb-3 rounded">
+                                <div className="avatar-read mb-3 rounded">
                                     <img
                                         src="https://haycafe.vn/wp-content/uploads/2022/02/Avatar-trang-den.png"
                                         alt="avatar"
@@ -184,6 +201,7 @@ function PersonalInformation() {
                                     type="button"
                                     className="btn btn-secondary"
                                     data-bs-dismiss="modal"
+                                    onClick={handleClose}
                                 >
                                     Đóng
                                 </button>
