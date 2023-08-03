@@ -39,6 +39,7 @@ public class DataMapper {
     public static MessageDto toMessage (Message message){
 
         MessageDto messageDto = MessageDto.builder()
+                .userId(message.getSender() != null ? message.getSender().getId() : 0)
                 .content(message.getContent())
                 .createdDateTime(Timestamp.valueOf(message.getSentTime()))
                 .username(message.getSender() != null ? message.getSender().getEmployeeName() : "")

@@ -61,23 +61,4 @@ public class SocketService {
 
     }
 
-    public void saveInfoMessage(SocketIOClient client, String message, Integer roomId, Integer userId) {
-        Room room = roomRepository.findById(roomId).orElse(null);
-        User user = userRepository.findById(userId).orElse(null);
-
-        Message newMessage = Message.builder()
-                .sentTime(LocalDateTime.now())
-                .sender(user)
-                .content(message)
-                .room(room)
-                .build();
-
-        messageRepository.save(newMessage);
-
-        log.info("vao saveInfoMessage");
-
-        sendSocketMessage(client, DataMapper.toMessage(newMessage), String.valueOf(room.getId()));
-    }
-
-
 }

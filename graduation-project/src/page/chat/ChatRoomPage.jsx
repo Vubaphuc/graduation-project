@@ -177,6 +177,7 @@ const ChatRoomPage = () => {
                 content: messageInput,
             })
             const newMessage = {
+                userId: auth.id,
                 content: messageInput,
                 username: auth.employeeName,
                 createdDateTime: new Date(),
@@ -241,7 +242,9 @@ const ChatRoomPage = () => {
                                     <Message
                                         key={index}
                                         text={message.content}
+                                        userId={message.userId}
                                         displayName={message.username}
+                                        createdAt={message.createdDateTime}
                                     />
                                 ))}
                         </MessageListStyled>

@@ -378,29 +378,7 @@ function Visitor() {
                                 </ul>
                             </div>
                         </div>
-                        <div className="footer-top-item">
-                            <div className="title">
-                                <div className="all-icon icon-email"></div>
-                                Đăng ký nhận bảng tin
-                            </div>
-                            <form>
-                                <div className="footer-top-content">
-                                    <div className="subscribe-form">
-                                        <input
-                                            type="text"
-                                            id="subscribe-email"
-                                            placeholder="Nhập email của bạn..."
-                                        />
-                                        <button
-                                            type="submit"
-                                            id="subscribe-btn"
-                                            className="btn_nhan"
-                                        >
-                                            Gửi
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
+                        <div className="footer-top-item">                           
                             <div className="title">
                                 <div className="all-icon icon-connect"></div>
                                 Liên kết
