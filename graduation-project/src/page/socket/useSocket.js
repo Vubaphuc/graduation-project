@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
 import { io } from "socket.io-client";
+import { ModalContext } from "../chat/Context/ModalProvider";
 
 export const useSocket = (roomId, userId) => {
     const [socket, setSocket] = useState(null);
@@ -21,6 +22,7 @@ export const useSocket = (roomId, userId) => {
         s.on("connect", () => setConnected(true));
         s.on("read_message", (res) => {
             const message = {
+                userId: res.userId,
                 content: res.content,
                 username: res.username,
                 createdDateTime: res.createdDateTime,

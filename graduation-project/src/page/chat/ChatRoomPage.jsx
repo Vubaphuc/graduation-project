@@ -10,6 +10,7 @@ import Message from "./Message";
 import { useContext } from "react";
 import { ModalContext } from "./Context/ModalProvider";
 import { useDeleteRoomChatMutation, useLazyGetMemberByRoomIdQuery } from "../../app/apis/employee/chatApi";
+import { useNavigate } from "react-router-dom";
 
 
 const WrapperStyled = styled.div`
@@ -83,6 +84,7 @@ const MessageListStyled = styled.div`
 
 const ChatRoomPage = () => {
     const { auth } = useSelector((state) => state.auth);
+    const navigate = useNavigate();
     const { setIsInviteMemberVisible, setSelectedRoomId, selectedRoomId, setSelectedMember, selectedMember } = useContext(ModalContext);
     const [messages, setMessages] = useState([]);
     const [socket, setSocket] = useState(null);
@@ -196,7 +198,8 @@ const ChatRoomPage = () => {
     const handleDelete = () => {
         deleteRoom(selectedRoomId)
             .then(() => {
-                toast.error("Xóa Thành Công");
+                toast.error("Xóa Thành Công"); 
+                setSelectedRoomId(null);            
             })
             .catch((err) => {
                 toast.error(err.data.message);

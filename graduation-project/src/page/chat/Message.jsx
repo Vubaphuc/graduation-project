@@ -37,6 +37,8 @@ function Message({ text, displayName, userId, createdAt }) {
   const { auth } = useSelector((state) => state.auth);
 
 
+  console.log(userId)
+
   const avatarUrl = `http://localhost:8080/employee/api/v1/avatar/${userId}`;
 
   

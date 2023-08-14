@@ -76,9 +76,7 @@ import WarrantyReceiptList from './page/employee/WarrantyEmployee/receipt/Warran
 import WarrantyProductNoCreateReceiptList from './page/employee/WarrantyEmployee/receipt/WarrantyProductNoCreateReceiptList';
 import RecepProductNoCreateReceiptList from './page/employee/Receptionist/receipt/RecepProductNoCreateReceiptList';
 import SearchPage from './page/employee/SearchPage';
-import RoomPage from './page/chat/RoomPage';
 import ChatRoomPage from './page/chat/ChatRoomPage';
-import RoomCreate from './page/chat/RoomCreate';
 import ModalProvider from './page/chat/Context/ModalProvider';
 import InviteMemberModal from './page/chat/Modals/InviteMemberModal';
 import LayoutChat from './components/LayoutChat';
@@ -195,11 +193,7 @@ function App() {
             ]} />}>
               <Route path="change-password" element={<ChangePassword />} />
               <Route path="personal-information" element={<PersonalInformation />} />
-              <Route path="search" element={<SearchPage />} />
-
-              <Route path="room" element={<RoomPage />} />
-              <Route path="room/create" element={<RoomCreate />} />
-              <Route path="room/:roomId" element={<ChatRoomPage />} />
+              <Route path="search" element={<SearchPage />} />            
 
             </Route>
           </Route>
@@ -214,9 +208,7 @@ function App() {
               "NHANVIENKHO",
               "NHANVIENBAOHANH",
             ]} />}>          
-              <Route path="room" element={<RoomPage />} />
-              <Route path="room/create" element={<RoomCreate />} />
-              <Route path="room/:roomId" element={<ChatRoomPage />} />
+              <Route index element={<ChatRoomPage />} />
             </Route>
           </Route>
 

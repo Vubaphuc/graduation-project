@@ -4,6 +4,8 @@ import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
+import com.example.graduationprojectbe.entity.Room;
+import com.example.graduationprojectbe.entity.User;
 import com.example.graduationprojectbe.repository.RoomRepository;
 import com.example.graduationprojectbe.repository.UserRepository;
 import com.example.graduationprojectbe.request.other.MessageRequest;
@@ -31,7 +33,6 @@ public class SocketModule {
     }
 
 
-
     private DataListener<MessageRequest> onChatReceived() {
         return (senderClient, data, ackSender) -> {
             socketService.saveMessage(senderClient, data);
@@ -50,8 +51,11 @@ public class SocketModule {
                     Integer userId = Integer.valueOf(userIdValue);
                     String id = String.valueOf(roomId);
 
+
                     client.joinRoom(id);
                     log.info("connect Socket ID[{}] - room[{}] - username [{}]  Connected to chat module through", client.getSessionId().toString(), roomId, userId);
+
+
                 }
             }
         };

@@ -107,6 +107,7 @@ public class ChatService {
         User user = iCurrentUserLmpl.getUser();
 
         if (room.getAdmin().equals(user)) {
+            messageRepository.deleteByRoom(room);
             roomRepository.deleteById(room.getId());
         } else  {
             room.getUsers().remove(user);

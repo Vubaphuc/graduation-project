@@ -45,7 +45,7 @@ function RoomList() {
 
 
   useEffect(() => {
-    getRoom(auth.id)
+    getRoom(auth.id);
   }, [auth])
 
 

@@ -14,6 +14,7 @@ function AddRoomModal() {
     const { auth } = useSelector((state) => state.auth);
     const [selectedOption, setSelectedOption] = useState(null);
     const [searchValue, setSearchValue] = useState('');
+    const [roomName, setRoomName] = useState('');
     const [form] = Form.useForm();
     const { isAddRoomVisible, setIsAddRoomVisible } = useContext(ModalContext);
 
@@ -32,7 +33,9 @@ function AddRoomModal() {
             return;
         }
 
-        const newData = {roomName:  form.getFieldsValue().name , membersIds: selectedOption}
+        const newData = {roomName: roomName , membersIds: selectedOption}
+
+        console.log(newData)
 
         createRoom(newData)
         .then(() => {
@@ -84,7 +87,7 @@ function AddRoomModal() {
             >
                 <Form form={form} layout="vertical">
                     <Item label="Tên Phòng" name="name" className="mb-4 mt-4">
-                        <Input placeholder="Nhập Tên Phòng" />
+                        <Input placeholder="Nhập Tên Phòng" onChange={(e) => setRoomName(e.target.value)} />
                     </Item>
                     <Select
                         showSearch
@@ -96,6 +99,7 @@ function AddRoomModal() {
                         onSearch={handleSearch}
                         filterOption={false}
                         className="mb-4"
+                    
                     >
                         {searchValue && filteredOptions.map((option) => (
                             <Option key={option.id} value={option.id}>
