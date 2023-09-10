@@ -37,6 +37,10 @@ export const productGuaranteeManageApi = createApi ({
             query: ({page,pageSize,startDate,endDate}) => `product-delivered?page=${page}&pageSize=${pageSize}&startDate=${startDate}&endDate=${endDate}`,
             providesTags: ['Product'], 
         }),
+        findTotalProductGuaranteeByEngineer: builder.query({
+           query: () => "total-product-guarantee-engineer",
+           providesTags: ['Product'],
+        }),
     }),
 
 })
@@ -46,5 +50,6 @@ export const {
    useLazyFindProductGuaranteeUnderRepairAllQuery,
    useLazyFindProductGuaranteeRepairedAllQuery,
    useLazyFindProductGuaranteeWaitingForReturnAllQuery,
-   useLazyFindProductGuaranteeDeliveredAllQuery
+   useLazyFindProductGuaranteeDeliveredAllQuery,
+   useFindTotalProductGuaranteeByEngineerQuery
 } = productGuaranteeManageApi;

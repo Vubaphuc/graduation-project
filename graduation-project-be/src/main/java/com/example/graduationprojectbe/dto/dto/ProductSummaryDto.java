@@ -3,13 +3,11 @@ package com.example.graduationprojectbe.dto.dto;
 public class ProductSummaryDto {
     private long totalProductPending;
     private long totalProductInput;
-    private long totalProducts;
     private long totalProductsOk;
 
-    public ProductSummaryDto(long totalProductPending, long totalProductInput, long totalProducts, long totalProductsOk) {
+    public ProductSummaryDto(long totalProductPending, long totalProductInput, long totalProductsOk) {
         this.totalProductPending = totalProductPending;
         this.totalProductInput = totalProductInput;
-        this.totalProducts = totalProducts;
         this.totalProductsOk = totalProductsOk;
     }
 
@@ -27,14 +25,6 @@ public class ProductSummaryDto {
 
     public void setTotalProductInput(long totalProductInput) {
         this.totalProductInput = totalProductInput;
-    }
-
-    public long getTotalProducts() {
-        return totalProducts;
-    }
-
-    public void setTotalProducts(long totalProducts) {
-        this.totalProducts = totalProducts;
     }
 
     public long getTotalProductsOk() {

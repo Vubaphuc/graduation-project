@@ -1,10 +1,7 @@
 package com.example.graduationprojectbe.service.employee;
 
 import com.example.graduationprojectbe.constants.Status;
-import com.example.graduationprojectbe.dto.dto.CustomerDto;
-import com.example.graduationprojectbe.dto.dto.OrderMaterialDto;
-import com.example.graduationprojectbe.dto.dto.ProductNameModelLimitDto;
-import com.example.graduationprojectbe.dto.dto.VendorCountDto;
+import com.example.graduationprojectbe.dto.dto.*;
 import com.example.graduationprojectbe.dto.projection.MaterialProjection;
 import com.example.graduationprojectbe.dto.projection.UpdateMaterialInfo;
 import com.example.graduationprojectbe.entity.*;
@@ -737,6 +734,98 @@ public class ExcelExporterService {
 
             // Tự động điều chỉnh cột cho phù hợp
             for (int i = 0; i < 5; i++) {
+                sheet.autoSizeColumn(i);
+            }
+            // Ghi file Excel
+            try (FileOutputStream outputStream = new FileOutputStream(excelFile)) {
+                workbook.write(outputStream);
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return excelFile;
+    }
+
+    public File exportTopEngineerRepairToExcel() {
+        List<TotalProductByEngineerDto> products = productRepository.findTotalProductByEngineer(Status.DELIVERED);
+        String filePath = "TopList.xlsx";
+
+        File excelFile = new File(filePath);
+
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("Top Data");
+
+
+            // Tạo header cho file Excel
+            Row headerRow = sheet.createRow(0);
+            headerRow.createCell(0).setCellValue("Employee Code");
+            headerRow.createCell(1).setCellValue("Employee Name");
+            headerRow.createCell(2).setCellValue("Quantity");
+
+
+            // Đổ dữ liệu từ danh sách sản phẩm vào file Excel
+            int rowNum = 1;
+            for (TotalProductByEngineerDto product : products) {
+
+
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue(product.getEmployeeCode());
+                row.createCell(1).setCellValue(product.getEmployeeName());
+                row.createCell(2).setCellValue(product.getTotalProduct());
+
+            }
+
+            // Tự động điều chỉnh cột cho phù hợp
+            for (int i = 0; i < 3; i++) {
+                sheet.autoSizeColumn(i);
+            }
+            // Ghi file Excel
+            try (FileOutputStream outputStream = new FileOutputStream(excelFile)) {
+                workbook.write(outputStream);
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return excelFile;
+    }
+
+    public File exportTopEngineerRepairComebackToExcel() {
+        List<TotalProductByEngineerDto> products = productGuaranteeRepository.findTotalProductGuaranteeByEngineer();
+        String filePath = "TopComeBack.xlsx";
+
+        File excelFile = new File(filePath);
+
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("Top Data");
+
+
+            // Tạo header cho file Excel
+            Row headerRow = sheet.createRow(0);
+            headerRow.createCell(0).setCellValue("Employee Code");
+            headerRow.createCell(1).setCellValue("Employee Name");
+            headerRow.createCell(2).setCellValue("Quantity");
+
+
+            // Đổ dữ liệu từ danh sách sản phẩm vào file Excel
+            int rowNum = 1;
+            for (TotalProductByEngineerDto product : products) {
+
+
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue(product.getEmployeeCode());
+                row.createCell(1).setCellValue(product.getEmployeeName());
+                row.createCell(2).setCellValue(product.getTotalProduct());
+
+            }
+
+            // Tự động điều chỉnh cột cho phù hợp
+            for (int i = 0; i < 3; i++) {
                 sheet.autoSizeColumn(i);
             }
             // Ghi file Excel

@@ -20,53 +20,10 @@ export const chatApi = createApi ({
         getMessageByRoomId: builder.query ({
             query: (id) => `message/${id}`,
             providesTags: ['Chat']
-        }),
-        getMemberByRoomId: builder.query ({
-            query: (id) => `room/${id}/members`,
-            providesTags: ['Chat'],
-        }),
-        createRoom: builder.mutation ({
-            query: (data) => ({
-                url: "createRoom",
-                method: "POST",
-                body: data,
-            }),
-            invalidatesTags: ['Chat'],
-        }),
-        addMemberToRoom: builder.mutation ({
-            query: (data) => ({
-                url: "room/members",
-                method: "PUT",
-                body: data,
-            }),
-            invalidatesTags: ['Chat'],
-        }),
-        deleteRoomChat: builder.mutation ({
-            query: (id) => ({
-                url: `room/${id}`,
-                method: "DELETE",
-            }),
-            invalidatesTags: ['Chat'],
-        }),
-        getRoomAll: builder.query ({
-            query: () => "room",
-            providesTags: ['Chat']
-        }),
-        getRoomByUserId: builder.query ({
-            query: (id) => `room/members/${id}`,
-            providesTags: ['Chat'],
-        })
+        }),   
     }),
 });;
 
 export const { 
     useLazyGetMessageByRoomIdQuery,
-    useGetMemberByRoomIdQuery,
-    useLazyGetMemberByRoomIdQuery,
-    useCreateRoomMutation,
-    useAddMemberToRoomMutation,
-    useDeleteRoomChatMutation,
-    useGetRoomAllQuery,
-    useLazyGetRoomByUserIdQuery,
-    useGetRoomByUserIdQuery,
 } = chatApi;

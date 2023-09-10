@@ -41,10 +41,13 @@ public class ProductManageService {
 
     // lấy tổng sản phẩm theo từng nhân viên sửa chữa
     public List<TotalProductDto> findTotalProductByEngineerAll() {
+
+        LocalDate today = LocalDate.now();
+
         return userRepository.findEmployeeEngineerAll()
                 .stream()
                 .map(user -> {
-                    long totalOK = productRepository.countTotalProductOKByEmployeeCode(user.getEmployeeCode());
+                    long totalOK = productRepository.countTotalProductOKByEmployeeCode(user.getEmployeeCode(), today);
                     long totalPending = productRepository.countTotalProductPendingByEmployeeCode(user.getEmployeeCode(), Status.UNDER_REPAIR);
                     return DataMapper.toTotalProductDto(user,totalOK,totalPending);
                 }).collect(Collectors.toList());
@@ -58,7 +61,7 @@ public class ProductManageService {
                 .stream()
                 .map(user -> {
                     long totalOK = productRepository.countTotalProductOKYesterdayByEmployeeCode(user.getEmployeeCode(), previousDate);
-                    long totalPending = productRepository.countTotalProductPendingYesterdayByEmployeeCode(user.getEmployeeCode(),Status.UNDER_REPAIR, Status.REPAIRED);
+                    long totalPending = productRepository.countTotalProductPendingYesterdayByEmployeeCode(user.getEmployeeCode(),Status.UNDER_REPAIR);
                     return DataMapper.toTotalProductDto(user,totalOK,totalPending);
                 }).collect(Collectors.toList());
     }

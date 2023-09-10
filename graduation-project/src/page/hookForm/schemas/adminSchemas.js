@@ -32,6 +32,9 @@ export const updateInformationSchema = yup.object({
     phone: yup.string()
     .required("Số Điện Thoại không được để trống")
     .matches(/(84|0[3|5|7|8|9])([0-9]{8})\b/, "Số Điện Thoại không hợp lệ"),
+    roleIds: yup.array().test("isCategoryIdsRequired", "Danh mục không được để trống", (value) => {
+        return value && value.length > 0 || typeof value === 'undefined';
+      }),
     address: yup.string().required("Địa chỉ không được để trống"),
 
 });

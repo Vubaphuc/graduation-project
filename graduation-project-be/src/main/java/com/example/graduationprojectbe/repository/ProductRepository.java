@@ -105,7 +105,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("select new com.example.graduationprojectbe.dto.dto.ProductSummaryDto(" +
             "sum (case when (p.status != :Delivered ) then 1 else 0 end )," +
             "sum (case when function('DATE', p.inputDate) = current_date then 1 else 0 end )," +
-            "(sum (case when (p.status != :Delivered)then 1 else 0 end )) + (sum (case when function('DATE',p.inputDate) = current_date then 1 else 0 end )) ," +
             "sum (case when p.status = :Delivered and function('DATE', p.finishDate) = current_date then 1 else 0 end ) " +
             ") " +
             "from Product p where p.delete = true ")
@@ -120,8 +119,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("select count(p) from Product p " +
             "join p.engineer u " +
             "join u.roles rl " +
-            "where u.employeeCode = ?1 and rl.name = 'NHANVIENSUACHUA' and function('DATE', p.outputDate) = current_date and p.delete = true ")
-    long countTotalProductOKByEmployeeCode(String employeeCode);
+            "where u.employeeCode = :employeeCode and rl.name = 'NHANVIENSUACHUA' and function('DATE', p.outputDate) = :today and p.delete = true ")
+    long countTotalProductOKByEmployeeCode(@Param("employeeCode") String employeeCode,@Param("today") LocalDate today);
 
     @Query("select count(p) from Product p " +
             "join p.engineer u " +
@@ -138,8 +137,10 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("select count(p) from Product p " +
             "join p.engineer u " +
             "join u.roles rl " +
-            "where u.employeeCode = :employeeCode and rl.name = 'NHANVIENSUACHUA' and ((p.status = :underRepair and p.transferDate < current_date ) or (p.status = :repaired and p.outputDate = current_date) ) and p.delete = true ")
-    long countTotalProductPendingYesterdayByEmployeeCode(@Param("employeeCode") String employeeCode,@Param("underRepair") Status underRepair, @Param("repaired") Status repaired);
+            "where u.employeeCode = :employeeCode " +
+            "and rl.name = 'NHANVIENSUACHUA' " +
+            "and p.status = :underRepair and p.delete = true ")
+    long countTotalProductPendingYesterdayByEmployeeCode(@Param("employeeCode") String employeeCode,@Param("underRepair") Status underRepair);
 
 
     @Query("select p from Product p where p.status = ?1 and function('DATE', p.outputDate) = CURRENT_DATE and p.delete = true ")

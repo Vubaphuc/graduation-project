@@ -4,9 +4,6 @@ import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
-import com.example.graduationprojectbe.entity.Room;
-import com.example.graduationprojectbe.entity.User;
-import com.example.graduationprojectbe.repository.RoomRepository;
 import com.example.graduationprojectbe.repository.UserRepository;
 import com.example.graduationprojectbe.request.other.MessageRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -18,14 +15,10 @@ public class SocketModule {
 
     private final SocketIOServer server;
     private final SocketService socketService;
-    private final RoomRepository roomRepository;
-    private final UserRepository userRepository;
 
-    public SocketModule(SocketIOServer server, SocketService socketService, RoomRepository roomRepository, UserRepository userRepository) {
-        this.roomRepository = roomRepository;
+    public SocketModule(SocketIOServer server, SocketService socketService ) {
         this.server = server;
         this.socketService = socketService;
-        this.userRepository = userRepository;
 
         server.addConnectListener(onConnected());
         server.addDisconnectListener(onDisconnected());
@@ -43,17 +36,15 @@ public class SocketModule {
         return (client) -> {
             var params = client.getHandshakeData().getUrlParams();
             if (params != null) {
-                String roomIdValue = params.get("roomId") != null ? String.join("", params.get("roomId")) : "";
+
+                String roomValue = params.get("room") != null ? String.join("", params.get("room")) : "";
                 String userIdValue = params.get("userId") != null ? String.join("", params.get("userId")) : "";
 
-                if (!roomIdValue.isEmpty() && !userIdValue.isEmpty()) {
-                    Integer roomId = Integer.valueOf(roomIdValue);
+                if (!roomValue.isEmpty() && !userIdValue.isEmpty()) {
                     Integer userId = Integer.valueOf(userIdValue);
-                    String id = String.valueOf(roomId);
 
-
-                    client.joinRoom(id);
-                    log.info("connect Socket ID[{}] - room[{}] - username [{}]  Connected to chat module through", client.getSessionId().toString(), roomId, userId);
+                    client.joinRoom(roomValue);
+                    log.info("connect Socket ID[{}] - room[{}] - username [{}]  Connected to chat module through", client.getSessionId().toString(), roomValue, userId);
 
 
                 }

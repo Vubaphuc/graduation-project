@@ -1,6 +1,7 @@
 package com.example.graduationprojectbe.repository;
 
 import com.example.graduationprojectbe.constants.Status;
+import com.example.graduationprojectbe.dto.dto.TotalProductByEngineerDto;
 import com.example.graduationprojectbe.dto.projection.ProductGuaranteeProjection;
 import com.example.graduationprojectbe.dto.projection.ProductProjection;
 import com.example.graduationprojectbe.dto.projection.VisitorSearchInfo;
@@ -90,5 +91,11 @@ public interface ProductGuaranteeRepository extends JpaRepository<ProductGuarant
     Page<ProductGuaranteeProjection> findProductGuaranteeDeliveredAll_ADMIN(Pageable pageable,@Param("startDate") LocalDateTime startDate,@Param("endDate") LocalDateTime endDate,@Param("status") Status status);
 
 
+    @Query("select new com.example.graduationprojectbe.dto.dto.TotalProductByEngineerDto" +
+            "(u.employeeCode, u.employeeName, count (pg.id)) " +
+            "from ProductGuarantee pg " +
+            "join pg.engineer u " +
+            "group by u.employeeCode, u.employeeName order by count (pg.id)")
+    List<TotalProductByEngineerDto> findTotalProductGuaranteeByEngineer();
 
 }

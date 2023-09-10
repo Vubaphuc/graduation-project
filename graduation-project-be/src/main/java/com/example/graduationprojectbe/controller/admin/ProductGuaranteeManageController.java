@@ -61,4 +61,9 @@ public class ProductGuaranteeManageController {
                                                      @RequestParam(required = false) LocalDateTime endDate) {
         return ResponseEntity.ok(productGuaranteeManageService.findProductGuaranteeDeliveredAll(page,pageSize,startDate,endDate));
     }
+
+    @GetMapping("total-product-guarantee-engineer")
+    public ResponseEntity<?> findTotalProductGuaranteeByEngineer () {
+        return ResponseEntity.ok(productGuaranteeManageService.findTotalProductGuaranteeByEngineer());
+    }
 }

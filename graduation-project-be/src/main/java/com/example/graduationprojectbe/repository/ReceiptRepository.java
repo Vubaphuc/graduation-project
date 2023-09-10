@@ -11,7 +11,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface ReceiptRepository extends JpaRepository<Receipt, Integer> {
-    Optional<Receipt> findByProduct_Id(Integer id);
+    @Query("select r from Receipt r where r.product.id = ?1")
+    Optional<Receipt> findByProductId(Integer id);
 
     @Query("select r from Receipt r join r.product p where p.ime like %?1% ")
     Page<ReceiptInfo> findReceiptAll(Pageable pageable, String term);

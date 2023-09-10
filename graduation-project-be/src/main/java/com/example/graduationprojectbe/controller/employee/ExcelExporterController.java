@@ -200,4 +200,40 @@ public class ExcelExporterController {
         return new ResponseEntity<>(resource, headers, HttpStatus.OK);
     }
 
+
+
+    // danh sách nhân viên sửa chữa nhiểu nhất
+    @GetMapping("export-top-engineer-repair")
+    public ResponseEntity<?> exportTopEngineerRepairToExcel() {
+
+        File excelFile = excelExporterService.exportTopEngineerRepairToExcel();
+
+        // Thiết lập các header cho HTTP
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", excelFile.getName());
+
+        // Tạo đối tượng interface Resource từ file Excel
+        Resource resource = new FileSystemResource(excelFile);
+
+        return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+    }
+
+    // danh sách nhân viên sửa chữa quay lại nhiểu nhất
+    @GetMapping("export-top-engineer-repair-comeback")
+    public ResponseEntity<?> exportTopEngineerRepairComebackToExcel() {
+
+        File excelFile = excelExporterService.exportTopEngineerRepairComebackToExcel();
+
+        // Thiết lập các header cho HTTP
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", excelFile.getName());
+
+        // Tạo đối tượng interface Resource từ file Excel
+        Resource resource = new FileSystemResource(excelFile);
+
+        return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+    }
+
 }

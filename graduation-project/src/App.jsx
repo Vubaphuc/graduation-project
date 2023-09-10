@@ -77,17 +77,12 @@ import WarrantyProductNoCreateReceiptList from './page/employee/WarrantyEmployee
 import RecepProductNoCreateReceiptList from './page/employee/Receptionist/receipt/RecepProductNoCreateReceiptList';
 import SearchPage from './page/employee/SearchPage';
 import ChatRoomPage from './page/chat/ChatRoomPage';
-import ModalProvider from './page/chat/Context/ModalProvider';
-import InviteMemberModal from './page/chat/Modals/InviteMemberModal';
-import LayoutChat from './components/LayoutChat';
-import AddRoomModal from './page/chat/Modals/AddRoomModal';
 
 function App() {
 
 
   return (
     <>
-      <ModalProvider>
         <Routes>
 
           <Route path='receptionist' element={<Layout />}>
@@ -200,7 +195,7 @@ function App() {
 
 
 
-          <Route path='chat' element={<LayoutChat />}>
+          <Route path='chat' element={<Layout />}>
             <Route element={<AuthorizeRoutes requireRoles={[
               "NHANVIENSUACHUA",
               "NHANVIENLETAN",
@@ -221,8 +216,6 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
 
-        <InviteMemberModal />
-        <AddRoomModal />
 
         <ToastContainer
           position="top-right"
@@ -236,7 +229,6 @@ function App() {
           pauseOnHover
           theme="colored"
         />
-      </ModalProvider>
     </>
   )
 }

@@ -1,6 +1,7 @@
 package com.example.graduationprojectbe.service.admin;
 
 import com.example.graduationprojectbe.constants.Status;
+import com.example.graduationprojectbe.dto.dto.TotalProductByEngineerDto;
 import com.example.graduationprojectbe.dto.page.PageDto;
 import com.example.graduationprojectbe.dto.projection.ProductGuaranteeProjection;
 import com.example.graduationprojectbe.dto.projection.ProductProjection;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ProductGuaranteeManageService {
@@ -176,4 +178,10 @@ public class ProductGuaranteeManageService {
                 products.getContent()
         );
     }
+
+    public List<TotalProductByEngineerDto> findTotalProductGuaranteeByEngineer() {
+        List<TotalProductByEngineerDto> products = productGuaranteeRepository.findTotalProductGuaranteeByEngineer();
+        return products.subList(0,Math.min(products.size(),10));
+    }
+
 }

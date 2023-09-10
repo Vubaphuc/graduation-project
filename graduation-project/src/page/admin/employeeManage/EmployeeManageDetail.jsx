@@ -1,9 +1,9 @@
 import { Controller } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Select from "react-select";
-import { getAddress } from "../../formHTML/options";
+import { getAddress, getRoles } from "../../formHTML/options";
 import addressQuery from "../../formHTML/address";
-import { useDeleteEmployeeByIdMutation, useEnabledEmployeeByIdMutation, useFindEmployeeByIdQuery } from "../../../app/apis/admin/employeeManageApi";
+import { useDeleteEmployeeByIdMutation, useEnabledEmployeeByIdMutation, useFindEmployeeByIdQuery, useFindRolesAllQuery } from "../../../app/apis/admin/employeeManageApi";
 import hookAdminUpdatePassword from "../../hookForm/hook/hookAdmin/hookAdminUpdatePassword";
 import hookAdminInformationEmployee from "../../hookForm/hook/hookAdmin/hookAdminInformationEmployee";
 import { toast } from "react-toastify";
@@ -22,18 +22,27 @@ function EmployeeManageDetail () {
     const { data: employeeData, isLoading: employeeLoading } = useFindEmployeeByIdQuery(employeeId);
     const [enabledEmployee] = useEnabledEmployeeByIdMutation();
 
+    const { data: rolesData, isLoading: roleLoading } = useFindRolesAllQuery();
 
 
 
-    if (employeeLoading) {
+
+    if (employeeLoading || roleLoading) {
         return <h2>Loading...</h2>
     }
 
+
+    const defaultRoles = {
+        value: employeeData?.roles.id,
+        label: employeeData?.roles.name
+    }
 
     const defaultAddress = {
         value: employeeData?.address,
         label: employeeData?.address
     }
+
+    const roleOption = getRoles(rolesData);
 
     const addressOptions = getAddress(provinces);
 
@@ -68,6 +77,8 @@ function EmployeeManageDetail () {
         })
     }
 
+
+    console.log(employeeData)
 
 
     return (
@@ -167,6 +178,29 @@ function EmployeeManageDetail () {
                                             <p className="text-danger fst-italic mt-2">
                                                 {errorsUpdateInformation.phone?.message}
                                             </p>
+                                        </div>
+                                        <div className="mb-3">
+                                            <label className="col-form-label">Roles</label>
+                                            <Controller
+                                                name="roleIds"
+                                                control={control}
+                                                defaultValue={employeeData?.roles.map((role) => role.id)}
+                                                render={({ field: { onChange, value, ref } }) => (
+                                                    <div>
+                                                        <Select
+                                                            placeholder="--Chọn Roles--"
+                                                            inputRef={ref}
+                                                            options={roleOption}
+                                                            defaultValue={defaultRoles}
+                                                            onChange={(val) => {
+                                                                onChange(val.map((c) => c.value))
+                                                            }}
+                                                            isMulti
+                                                            value={value.map((val) => roleOption.find((option) => option.value === val))}
+                                                        />                                                     
+                                                    </div>
+                                                )}
+                                            />
                                         </div>
                                         <div className="mb-3">
                                             <label className="col-form-label">Address</label>

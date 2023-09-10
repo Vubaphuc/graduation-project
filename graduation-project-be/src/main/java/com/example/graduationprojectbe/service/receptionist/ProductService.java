@@ -19,6 +19,7 @@ import com.example.graduationprojectbe.sercurity.ICurrentUserLmpl;
 import com.example.graduationprojectbe.service.auth.EmailService;
 import com.example.graduationprojectbe.service.auth.PDFService;
 import com.itextpdf.text.DocumentException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +30,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Service
+@Slf4j
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
@@ -223,7 +225,7 @@ public class ProductService {
     // tạo hóa đơn
     public StatusResponse createBill(CreateBillAndGuaranteeRequest request) throws DocumentException, IOException {
         // lấy ra biên lai nhận sản phẩm
-        Receipt receipt = receiptRepository.findByProduct_Id(request.getProductId()).orElseThrow(() -> new NotFoundException("Not Found With ID: " + request.getProductId()));
+        Receipt receipt = receiptRepository.findByProductId(request.getProductId()).orElseThrow(() -> new NotFoundException("Not Found With ID: " + request.getProductId()));
 
         // lấy ra sản phẩm theo id
         Product product = productRepository.findById(request.getProductId()).orElseThrow(() -> new NotFoundException("Not Found with id : " + request.getProductId()));
@@ -261,7 +263,7 @@ public class ProductService {
     // tạo biên lai thu nhận sản phẩm
     public StatusResponse createReceipt(Integer id) throws DocumentException, IOException {
 
-        if (receiptRepository.findByProduct_Id(id).isPresent()) {
+        if (receiptRepository.findByProductId(id).isPresent()) {
             throw new BadRequestException("generated receipt");
         }
 

@@ -61,6 +61,8 @@ function SearchPage() {
         exportToExcel(data)
     }
 
+    console.log(productData)
+
     const handleResfed = () => {
         setTerm("");
         setStartDate(null);
@@ -177,7 +179,7 @@ function SearchPage() {
                                                         onPageChange={handlePageClick}
                                                         pageRangeDisplayed={3}
                                                         marginPagesDisplayed={2}
-                                                        pageCount={1}
+                                                        pageCount={productData?.totalPages}
                                                         previousLabel="< previous"
                                                         pageClassName="page-item"
                                                         pageLinkClassName="page-link"

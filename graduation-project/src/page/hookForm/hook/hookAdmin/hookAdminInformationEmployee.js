@@ -22,8 +22,11 @@ const hookAdminInformationEmployee = () => {
         .then((res) => {
             toast.success("Cập Nhật Thông Tin Thành Công");
             setTimeout(()=> {
-                navigate(`/admin/employee/${res.data.id}`)
+                navigate("/admin/employees")
             },1000)
+        })
+        .catch((err) => {
+            toast.error(err.data.message)
         })
     }
 

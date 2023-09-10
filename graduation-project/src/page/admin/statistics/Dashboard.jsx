@@ -6,6 +6,7 @@ import chartPie from "../../chartjs/chartPie";
 import chartDoughnut from "../../chartjs/chartDoughnut";
 import { useFindMaterialRemainingQuantityLimitQuery, useLazyFindOrderMaterialLimitQuery } from "../../../app/apis/admin/materialManageApi";
 import { useFindCustomerByProductLimitQuery, useFindProductByNameModelLimitQuery, useFindTotalProductByEngineerQuery, useFindTotalProductOkAndPendingQuery } from "../../../app/apis/admin/productManageApi";
+import { useFindTotalProductGuaranteeByEngineerQuery } from "../../../app/apis/admin/productGuaranteeManageApi";
 
 function Dashboard() {
 
@@ -16,6 +17,7 @@ function Dashboard() {
     const { data: customerData } = useFindCustomerByProductLimitQuery();
     const { data: totalProductData } = useFindTotalProductOkAndPendingQuery();
     const { data: totalProdcutEngi } = useFindTotalProductByEngineerQuery();
+    const { data: totalProductGuarantee } = useFindTotalProductGuaranteeByEngineerQuery();
 
     useEffect(() => {
         getOrderMaterialLimit();
@@ -28,12 +30,20 @@ function Dashboard() {
 
     const labelsD = orderMaterialLimitData?.map((order) => order.materialCode);
     const dataD = orderMaterialLimitData?.map((order) => order.totalQuantityExport);
-    const labelProductName = NameProductData?.map((product) => product.nameModel)
-    const dataProductName = NameProductData?.map((product) => product.sumProduct)
-    const labelCustomer = customerData?.map((product) => product.fullName)
-    const dataCustomer = customerData?.map((product) => product.sumProduct)
-    const labelMaterialRemaining = materialRemainingData?.map((material) => material.code)
-    const dataMaterialRemaining = materialRemainingData?.map((material) => material.remainingQuantity)
+
+    const labelProductName = NameProductData?.map((product) => product.nameModel);
+    const dataProductName = NameProductData?.map((product) => product.sumProduct);
+
+    const labelEmployeName = totalProductGuarantee?.map((product) => product.employeeName);
+    const dataEmployeeQuantity = totalProductGuarantee?.map((product) => product.totalProduct);
+
+    const labelTopEmployeName = totalProdcutEngi?.map((product) => product.employeeName);
+    const dataTopEmployeeQuantity = totalProdcutEngi?.map((product) => product.totalProduct);
+
+    const labelCustomer = customerData?.map((product) => product.fullName);
+    const dataCustomer = customerData?.map((product) => product.sumProduct);
+    const labelMaterialRemaining = materialRemainingData?.map((material) => material.code);
+    const dataMaterialRemaining = materialRemainingData?.map((material) => material.remainingQuantity);
 
 
     const ok = totalProductData?.deliveredCount;
@@ -47,6 +57,12 @@ function Dashboard() {
 
     const { data: doughnutData } = chartDoughnut(labelsD, dataD);
     const { data: doughnutProductData } = chartDoughnut(labelProductName, dataProductName);
+
+
+    const { data: doughnutProductGuaranteeData } = chartDoughnut(labelEmployeName, dataEmployeeQuantity);
+    const { data: doughnutTopProductData } = chartDoughnut(labelTopEmployeName, dataTopEmployeeQuantity);
+
+
     const { data: doughnutCustomerData } = chartDoughnut(labelCustomer, dataCustomer);
     const { data: doughnutMaterialRemainingData } = chartDoughnut(labelMaterialRemaining, dataMaterialRemaining);
     const { data: pieTotalProductData, options: pieTotalProductOption } = chartPie(dataTotalProduct)
@@ -68,6 +84,16 @@ function Dashboard() {
 
     const exportCustomerByProductLimitToExcel = () => {
         const url = "http://localhost:8080/excel/api/v1/export-customer";
+        window.location.href = url;
+    }
+
+    const exportTopEngineerRepairToExcel = () => {
+        const url = "http://localhost:8080/excel/api/v1/export-top-engineer-repair";
+        window.location.href = url;
+    }
+
+    const exportTopEngineerRepairComeBackToExcel = () => {
+        const url = "http://localhost:8080/excel/api/v1/export-top-engineer-repair-comeback";
         window.location.href = url;
     }
 
@@ -175,9 +201,9 @@ function Dashboard() {
                     <div className="dt-tp">
                         <div className="text-center p-4">
                             <div className="d-flex align-items-center justify-content-between mb-4">
-                                <h6 className="mb-0">Tỷ lệ từng model sản phẩm</h6>
+                                <h6 className="mb-0">Tỷ lệ theo nhân viên </h6>
                             </div>
-                            <Pie data={pieTotalProductData} options={pieTotalProductOption} plugins={[ChartDataLabels]} />;
+                            <Doughnut data={doughnutTopProductData} plugins={[ChartDataLabels]} />;
                         </div>
                     </div>
                     <div className="dt-tp">
@@ -185,7 +211,7 @@ function Dashboard() {
                             <div className="d-flex align-items-center justify-content-between mb-4">
                                 <h6 className="mb-0">Top nhân viên sửa chữa nhiều nhất</h6>
                                 <div>
-                                    <button className="btn btn-warning px-4" variant="warning" onClick={exportProductByNameModelAllToExcel}>Export</button>
+                                    <button className="btn btn-warning px-4" variant="warning" onClick={exportTopEngineerRepairToExcel}>Export</button>
                                 </div>
                             </div>
                             {totalProdcutEngi && totalProdcutEngi.length > 0 ? (
@@ -200,6 +226,53 @@ function Dashboard() {
                                         </thead>
                                         <tbody >
                                             {totalProdcutEngi.map((product, index) => (
+                                                <tr key={index}>
+                                                    <td>{product.employeeCode}</td>
+                                                    <td>{product.employeeName}</td>
+                                                    <td>{product.totalProduct}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            ) : (
+                                <p>Không có sản phẩm nào !!!</p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div className="dt product-dt">
+                    <div className="dt-tp">
+                        <div className="text-center p-4">
+                            <div className="d-flex align-items-center justify-content-between mb-4">
+                                <h6 className="mb-0">Tỷ lệ theo nhân viên </h6>
+                            </div>
+                            <Doughnut data={doughnutProductGuaranteeData} plugins={[ChartDataLabels]} />;
+                        </div>
+                    </div>
+                    <div className="dt-tp">
+                        <div className="text-center p-4">
+                            <div className="d-flex align-items-center justify-content-between mb-4">
+                                <h6 className="mb-0">Top nhân viên sửa chữa quay lại nhiều nhất</h6>
+                                <div>
+                                    <button className="btn btn-warning px-4" variant="warning" onClick={exportTopEngineerRepairComeBackToExcel}>Export</button>
+                                </div>
+                            </div>
+                            {totalProductGuarantee && totalProductGuarantee.length > 0 ? (
+                                <div className="table-responsive">
+                                    <table className="table text-start align-middle table-bordered table-hover mb-0 mt-5">
+                                        <thead>
+                                            <tr className="text-white">
+                                                <th scope="col">Employee Code</th>
+                                                <th scope="col">Employee Name</th>
+                                                <th scope="col">Quantity</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody >
+                                            {totalProductGuarantee.map((product, index) => (
                                                 <tr key={index}>
                                                     <td>{product.employeeCode}</td>
                                                     <td>{product.employeeName}</td>

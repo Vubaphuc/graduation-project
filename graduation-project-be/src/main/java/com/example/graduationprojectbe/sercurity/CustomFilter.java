@@ -34,7 +34,7 @@ public class CustomFilter extends OncePerRequestFilter {
             filterChain.doFilter(request,response);
             return;
         }
-
+        // lay tu ky tu thu 7
         String jwtToken = authHeader.substring(7);
 
         // TODO: Lấy ra userEmail từ trong token

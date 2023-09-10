@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { useFindStatisticsTotalProductTodayQuery, useFindTotalProductByEngineerAllQuery, useFindTotalProductByEngineerYesterdayAllQuery, useLazyFindProductOKAllQuery, useLazyFindProductPendingAllQuery, useLazyFindProductsWaitingForRepairAllQuery } from "../../app/apis/admin/productManageApi";
 import chartBar from "../chartjs/chartBar";
@@ -39,11 +39,13 @@ function AdminPage() {
         })
     }, [])
 
+    
 
     if (productSummaryLoading) {
         return <h2>Loading....</h2>
     }
 
+    console.log(productEngiYesterDayData)
 
 
     const labels = productEngiData?.map((product) => product.employeeName);
@@ -92,7 +94,7 @@ function AdminPage() {
                         <i className="fa fa-chart-line fa-3x tk-ct-icon"></i>
                         <div className="ms-3 tk-ct-text">
                             <p className="mb-2">Tổng sản phẩm</p>
-                            <h6 className="mb-0">{productSummaryDate?.totalProducts}</h6>
+                            <h6 className="mb-0">{productSummaryDate?.totalProductPending + productSummaryDate?.totalProductsOk}</h6>
                         </div>
                     </div>
                     <div className="tk-ct d-flex align-items-center justify-content-between p-4">
@@ -129,14 +131,14 @@ function AdminPage() {
                             <Bar options={options} data={data} plugins={[ChartDataLabels]} />;
                         </div>
                     </div>
-                    <div className="dt-tp">
+                    {/* <div className="dt-tp">
                         <div className="text-center p-4">
                             <div className="d-flex align-items-center justify-content-between mb-4">
                                 <h6 className="mb-0">Tỷ Lệ Sửa Chữa Hôm trước</h6>
                             </div>
                             <Bar options={optionYes} data={dataYes} plugins={[ChartDataLabels]} />;
                         </div>
-                    </div>
+                    </div> */}
                 </div>
 
 

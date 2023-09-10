@@ -18,6 +18,9 @@ public class Message {
     @Column(name = "id", nullable = false)
     private Integer id;
 
+    @Column(name = "room")
+    private String room;
+
     @Column(name = "content")
     private String content;
 
@@ -28,8 +31,5 @@ public class Message {
     @JoinColumn(name = "sender_id")
     private User sender;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id")
-    private Room room;
 
 }

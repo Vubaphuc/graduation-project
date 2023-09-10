@@ -4,6 +4,7 @@ import com.example.graduationprojectbe.config.GenerateCode;
 import com.example.graduationprojectbe.dto.page.PageDto;
 import com.example.graduationprojectbe.dto.projection.EmployeeProjection;
 import com.example.graduationprojectbe.dto.projection.RoleInfo;
+import com.example.graduationprojectbe.entity.Role;
 import com.example.graduationprojectbe.entity.User;
 import com.example.graduationprojectbe.exception.BadRequestException;
 import com.example.graduationprojectbe.exception.NotFoundException;
@@ -95,8 +96,9 @@ public class EmployeeManageService {
         // lấy ra user theo id
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Not Found With id" + id));
+        List<Role> roles = roleRepository.findAllById(request.getRoleIds());
         // kiểm tra email đã tồn tại chưa
-        if (userRepository.findUsersByEmail(request.getEmail()).isPresent()){
+        if (userRepository.findUsersByEmail(request.getEmail()).isPresent() && !user.getEmail().equals(request.getEmail())){
             throw new BadRequestException("Email already exists. please use another email");
         }
         // cập nhật lại thông tin user
@@ -104,6 +106,7 @@ public class EmployeeManageService {
         user.setEmail(request.getEmail());
         user.setPhoneNumber(request.getPhone());
         user.setAddress(request.getAddress());
+        user.setRoles(roles);
         // lưu lại
         userRepository.save(user);
 

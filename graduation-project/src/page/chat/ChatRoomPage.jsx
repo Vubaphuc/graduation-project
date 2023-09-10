@@ -5,12 +5,8 @@ import axios from "axios";
 import { useSocket } from "../socket/useSocket";
 import { toast } from "react-toastify";
 import styled from "styled-components"
-import { Button, Tooltip, Avatar, Form, Input, Alert } from "antd";
+import { Button, Form, Input } from "antd";
 import Message from "./Message";
-import { useContext } from "react";
-import { ModalContext } from "./Context/ModalProvider";
-import { useDeleteRoomChatMutation, useLazyGetMemberByRoomIdQuery } from "../../app/apis/employee/chatApi";
-import { useNavigate } from "react-router-dom";
 
 
 const WrapperStyled = styled.div`
@@ -36,17 +32,6 @@ const HeaderStyled = styled.div`
         margin: 0;
         font-weight: bold;
     }
-  }
-`;
-
-const ButtonGroupStyled = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-  margin-right: 20px;
-
-  .ant-btn {
-    margin-right: 10px;
   }
 `;
 
@@ -83,19 +68,17 @@ const MessageListStyled = styled.div`
 
 
 const ChatRoomPage = () => {
+    const room = "chat"
     const { auth } = useSelector((state) => state.auth);
-    const navigate = useNavigate();
-    const { setIsInviteMemberVisible, setSelectedRoomId, selectedRoomId, setSelectedMember, selectedMember } = useContext(ModalContext);
     const [messages, setMessages] = useState([]);
     const [socket, setSocket] = useState(null);
     const [messageInput, setMessageInput] = useState("");
     const [messageData, setMessageData] = useState([]);
 
-    const { socketResponse, isConnected, sendData } = useSocket(selectedRoomId, auth.id);
+    const { socketResponse, isConnected, sendData } = useSocket(room, auth.id);
     const messageListRef = useRef(null);
 
-    const [getMember, { data: memberData, isLoading: memberLoading }] = useLazyGetMemberByRoomIdQuery();
-    const [deleteRoom] = useDeleteRoomChatMutation();
+
 
 
     useEffect(() => {
@@ -112,21 +95,14 @@ const ChatRoomPage = () => {
             }
         };
 
-    }, [selectedRoomId]);
+    }, [room]);
 
     useEffect(() => {
         setMessages([]);
         setMessageData([])
-    }, [selectedRoomId])
+    }, [room])
 
-    useEffect(() => {
-        if (selectedRoomId !== null) {
-            getMember(selectedRoomId);
-            setSelectedMember(false);
-        }
-    }, [selectedRoomId, selectedMember, socketResponse])
-
-
+   
 
     useEffect(() => {
         if (socketResponse != undefined) {
@@ -151,12 +127,9 @@ const ChatRoomPage = () => {
 
 
     const getMessage = async () => {
-
-        if (selectedRoomId === null) {
-            return;
-        }
+  
         try {
-            const rs = await axios.get(`http://localhost:8080/chat/api/v1/message/${selectedRoomId}`);
+            const rs = await axios.get(`http://localhost:8080/chat/api/v1/message/${room}`);
 
             console.log(rs.data)
             setMessageData(rs.data);
@@ -165,10 +138,6 @@ const ChatRoomPage = () => {
         }
     }
 
-
-    if (memberLoading) {
-        return <h2>Loading...</h2>
-    }
 
 
 
@@ -182,6 +151,7 @@ const ChatRoomPage = () => {
                 userId: auth.id,
                 content: messageInput,
                 username: auth.employeeName,
+                room: room,
                 createdDateTime: new Date(),
             };
             setMessages((prevMessages) => [...prevMessages, newMessage]);
@@ -191,52 +161,14 @@ const ChatRoomPage = () => {
         setMessageInput("");
     };
 
-    const handleModal = () => {
-        setIsInviteMemberVisible(true);
-    }
-
-    const handleDelete = () => {
-        deleteRoom(selectedRoomId)
-            .then(() => {
-                toast.error("Xóa Thành Công"); 
-                setSelectedRoomId(null);            
-            })
-            .catch((err) => {
-                toast.error(err.data.message);
-            })
-    }
-
-
-
+    
     return (
         <>
             <WrapperStyled>
-                {selectedRoomId ? (<>
                     <HeaderStyled>
                         <div className="headerInfo">
-                            <p className="headerTitle">{memberData?.name}</p>
-                        </div>
-                        <ButtonGroupStyled>
-                            <Button
-                                onClick={handleModal}
-                            >
-                                Mời
-                            </Button>
-                            <Avatar.Group size="small" maxCount={2}>
-                                {memberData && memberData.members.map((member) => (
-                                    <Tooltip title={member.employeeName} key={member.id} >
-                                        <Avatar src={`http://localhost:8080/employee/api/v1/avatar/${member.id}`}></Avatar>
-                                    </Tooltip>
-                                ))}
-                            </Avatar.Group>
-                            <Button
-                                className="ms-2"
-                                style={{ backgroundColor: "red" }}
-                                onClick={handleDelete}
-                            >
-                                Delete
-                            </Button>
-                        </ButtonGroupStyled>
+                            <p className="headerTitle">{room}</p>
+                        </div>                    
                     </HeaderStyled>
                     <ContentStyled>
                         <MessageListStyled ref={messageListRef}>
@@ -264,17 +196,7 @@ const ChatRoomPage = () => {
                                 Gửi
                             </Button>
                         </FormStyled>
-                    </ContentStyled>
-                </>
-                ) : (
-                    <Alert
-                        message='Hãy chọn phòng'
-                        type='info'
-                        showIcon
-                        style={{ margin: 5 }}
-                        closable
-                    />
-                )}
+                    </ContentStyled>              
             </WrapperStyled>
         </>
     );

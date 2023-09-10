@@ -70,7 +70,7 @@ function Visitor() {
             </div>
 
             <section className="container clearfix nav-bh">
-                <div className="tra-cuu">
+                {/* <div className="tra-cuu">
                     <label htmlFor="statusSelect" className="mb-2">
                         Chọn Loại Hình Tra Cứu:
                     </label>
@@ -83,8 +83,7 @@ function Visitor() {
                         <option value="GUARANTEE">Bảo Hành</option>
                         <option value="PRODUCT">Sản Phẩm</option>
                     </select>
-                </div>
-                {status === "PRODUCT" && (
+                </div> */}
                     <div className="search-warranty">
                         <div className="search-warranty-content">
                             <h1 className="search-warranty-content__title">Tra cứu Sản Phẩm</h1>
@@ -141,7 +140,7 @@ function Visitor() {
                                                                 <th>Số Ime</th>
                                                                 <th>Giá Tiền</th>
                                                                 <th>Tình Trạng</th>
-                                                                <th>Số Bảo Hành</th>
+                                                                {/* <th>Số Bảo Hành</th> */}
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -158,9 +157,9 @@ function Visitor() {
                                                                     <td>{product.price}</td>
                                                                     <td className={product.status ? "completed" : "not-completed"}>
                                                                         {product.status ? "Đã Sửa Chữa Xong" : "Chưa Sửa Chữa Xong"}</td>
-                                                                    <td>
+                                                                    {/* <td>
                                                                         {product.guarantees.map((guarantee) => guarantee.guaranteeCode).join(", ")}
-                                                                    </td>
+                                                                    </td> */}
                                                                 </tr>
                                                             ))}
                                                         </tbody>
@@ -181,8 +180,7 @@ function Visitor() {
                             )}
                         </div>
                     </div>
-                )}
-                {status === "GUARANTEE" && (
+                {/* {status === "GUARANTEE" && (
                     <div className="search-warranty">
                         <div className="search-warranty-content">
                             <h1 className="search-warranty-content__title">Tra cứu Bảo Hành</h1>
@@ -274,7 +272,7 @@ function Visitor() {
                             )}
                         </div>
                     </div>
-                )}
+                )} */}
             </section>
             <footer>
                 <div className="container">

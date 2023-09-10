@@ -12,6 +12,7 @@ import java.util.Date;
 @Builder
 public class MessageDto {
     private Integer userId;
+    private String room;
     private String content;
     private String username;
     private Date createdDateTime;

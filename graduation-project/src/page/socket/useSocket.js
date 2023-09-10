@@ -1,22 +1,21 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
 import { io } from "socket.io-client";
-import { ModalContext } from "../chat/Context/ModalProvider";
 
-export const useSocket = (roomId, userId) => {
+export const useSocket = (room, userId) => {
     const [socket, setSocket] = useState(null);
     const [isConnected, setConnected] = useState(false);
     const [socketResponse, setSocketResponse] = useState([]);
 
     useEffect(() => {
-        if (roomId === null || userId === null) {
+        if (userId === null) {
             return;
         }
 
         const s = io("http://localhost:8085", {
             reconnection: false,
-            query: `userId=${userId}&roomId=${roomId}`,
+            query: `userId=${userId}&room=${room}`,
         });
         setSocket(s);
         s.on("connect", () => setConnected(true));
@@ -25,6 +24,7 @@ export const useSocket = (roomId, userId) => {
                 userId: res.userId,
                 content: res.content,
                 username: res.username,
+                room: res.room,
                 createdDateTime: res.createdDateTime,
             }
             setSocketResponse((prevMessages) => [...prevMessages, message]);
@@ -32,41 +32,25 @@ export const useSocket = (roomId, userId) => {
         return () => {
             s.disconnect();
         };
-    }, [roomId, userId])
+    }, [room, userId])
 
     const sendData = useCallback(
         (payload) => {
             if (socket) {
                 socket.emit("send_message", {
-                    roomId: roomId,
+                    room: room,
                     content: payload.content,
                     userId: userId,
                 });
             }
         },
-        [socket, roomId]
+        [socket, room]
     );
 
-    const addMember = useCallback(
-        (payload) => {
-
-            if (socket) {
-                console.log(roomId)
-                socket.emit("add_member", {
-                    roomId: roomId,
-                    membersIds: payload.membersIds,
-                });
-
-            }
-        },
-        [socket, roomId]
-    );
-
-
-
+   
 
 
     return {
-        socketResponse, isConnected, sendData, socket, addMember
+        socketResponse, isConnected, sendData, socket
     }
 }

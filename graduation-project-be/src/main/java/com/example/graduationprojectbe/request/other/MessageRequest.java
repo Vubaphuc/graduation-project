@@ -8,6 +8,6 @@ import lombok.*;
 @Setter
 public class MessageRequest {
     private String content;
-    private Integer roomId;
+    private String  room;
     private Integer userId;
 }
