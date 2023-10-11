@@ -36,4 +36,10 @@ RESTful API
 
 ## ER Diagram
 
+![nhan-vien-le-tan](./images/diagram.png)
+
 ## Flowchart 
+
+### **Store operations diagram**
+
+![](./images/flowchart-store.png)
